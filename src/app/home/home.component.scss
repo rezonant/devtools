@@ -1,0 +1,61 @@
+:host {
+    display: flex;
+    flex-direction: column;
+
+    mat-tab-group {
+        flex-grow: 1;
+    }
+}
+
+::ng-deep rdt-tool-host + * {
+    flex-grow: 1;
+}
+
+a.tab-close {
+    position: absolute;
+    right: 0;
+}
+
+
+header {
+    display: flex;
+    align-items: baseline;
+
+    .logo {
+        font-size: 16px;
+        font-family: "Khand", sans-serif;
+
+        &.short {
+            display: none;
+        }
+    }
+    
+    // @media (max-width: 750px) {
+    //     .logo.long {
+    //         display: none;
+    //     }
+
+    //     .logo.short {
+    //         display: initial;
+    //     }
+    // }
+
+    // @media (max-width: 580px) {
+    //     .logo {
+    //         font-size: 16px;
+    //     }
+    // }
+
+    mat-form-field {
+        margin: 0 1em;
+        flex-grow: 1;
+    }
+}
+
+.tab-label {
+    padding-right: 20px;
+}
+
+.hidden {
+    display: none !important;
+}
