@@ -4,6 +4,12 @@ import { MatTabGroup } from "@angular/material/tabs";
 import { Tool, ToolComponent, ToolRegistry } from "../tools";
 import { Base64Component } from "../tools/base64.component";
 import { TestTool1Component } from "../tools/test-tool-1.component";
+import { v4 as uuid } from 'uuid';
+
+export interface SavedToolState {
+    activeToolId : string;
+    tools: Tool[]
+}
 
 @Component({
     templateUrl: './home.component.html',
@@ -47,6 +53,7 @@ export class HomeComponent {
             if (newTool)
                 newTool.component.visibilityChanged.next(true);
             this.activeTool = newTool;
+            this.saveTools();
             console.log(`Active tool: ${this.activeTool.component.label}`);
         });
 
@@ -91,13 +98,15 @@ export class HomeComponent {
         this.tabs.selectedIndex = this.tools.indexOf(tool);
     }
 
-    loadTools() {
+    async loadTools() {
         console.log(`Checking for saved tools...`);
-        let savedToolsStr : string = localStorage['rdt:tools'];
+        let savedToolsStr : string = localStorage['rdt:tools:v2'];
         if (savedToolsStr) {
-            let savedTools : Tool[] = JSON.parse(savedToolsStr);
+            let toolState : SavedToolState = JSON.parse(savedToolsStr);
+            let savedTools = toolState.tools;
+
             console.log(`Found saved tools. Loading...`);
-            savedTools = savedTools.filter(x => x)
+            savedTools = savedTools.filter(x => x);
             savedTools.forEach(tool => {
                 tool.componentClass = this.toolRegistry.tools.find(x => x['id'] === tool.toolId)
                 let markReady : () => void;
@@ -106,6 +115,20 @@ export class HomeComponent {
                 tool.markReady = markReady;
             });
             this.tools = savedTools;
+
+            await Promise.all(this.tools.map(x => x.ready));
+            console.log(`All saved tools loaded`);
+
+            if (toolState.activeToolId) {
+                let tool = this.tools.find(x => x.id === toolState.activeToolId);
+                if (tool) {
+                    console.log(`Switching to tool '${toolState.activeToolId}'`);
+                    this.switchToTool(tool);
+                } else {
+                    console.log(`Cannot switch to tool '${toolState.activeToolId}': No tool with that ID`);
+                }
+            }
+
         } else {
             console.log(`No saved tools found.`);
         }
@@ -113,19 +136,22 @@ export class HomeComponent {
 
     saveTools() {
         console.log(`Saving tools...`);
-        localStorage['rdt:tools'] = JSON.stringify(this.tools.map(x => {
-            let y = Object.assign({}, x);
-            y.componentRef = null;
-            y.component = null;
-            y.componentClass = null;
-            return y;
-        }));
+        localStorage['rdt:tools:v2'] = JSON.stringify(<SavedToolState>{
+            activeToolId: this.activeTool?.id,
+            tools: this.tools.map(x => {
+                let y = Object.assign({}, x);
+                y.componentRef = null;
+                y.component = null;
+                y.componentClass = null;
+                return y;
+            })
+        });
     }
 
     async addTool(toolClass : Type<ToolComponent>) {
         let markReady : () => void;
         let ready = new Promise<void>((resolve) => markReady = resolve);
-        let tool = { toolId: toolClass['id'], componentClass: toolClass, ready, markReady };
+        let tool = { id: uuid(), toolId: toolClass['id'], componentClass: toolClass, ready, markReady };
         this.tools.push(tool);
         await ready;
 
