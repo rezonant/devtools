@@ -152,9 +152,7 @@ export class HomeComponent {
     }
 
     async subscribeToTool(tool : Tool) {
-        console.log(`Subscribed to tool '${tool.toolId}' with ID ${tool.id}.`);
         tool.component.stateModified.subscribe(() => {
-            console.log(`Tool state updated.`);
             this.saveTools();
         });
     }
