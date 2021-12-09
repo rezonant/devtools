@@ -53,7 +53,7 @@ export class JsonViewComponent {
         this._object = value;
         setTimeout(() => {
             this.type = typeof this._object;
-            this.keys = Object.keys(value);
+            this.keys = value ? Object.keys(value) : [];
         });
     }
 
