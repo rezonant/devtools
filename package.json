@@ -21,11 +21,14 @@
     "@angular/platform-browser": "~13.0.0",
     "@angular/platform-browser-dynamic": "~13.0.0",
     "@angular/router": "~13.0.0",
+    "@astronautlabs/jwt": "^0.0.12",
     "@types/jsdom": "^16.2.13",
     "jsdom": "^19.0.0",
     "ngx-monaco-editor": "^12.0.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
+    "wtf_wikipedia": "^9.0.2",
+    "wtf-plugin-html": "^0.2.3",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

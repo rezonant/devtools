@@ -22,10 +22,6 @@ export class HomeComponent {
     ) {
     }
 
-    ngOnInit() {
-        this.loadTools();
-    }
-
     @ViewChild('tabMenu')
     tabMenu : MatMenu;
 
@@ -57,6 +53,7 @@ export class HomeComponent {
             console.log(`Active tool: ${this.activeTool.component.label}`);
         });
 
+        this.loadTools();
     }
 
     handleRightClick(event : MouseEvent) {
@@ -81,6 +78,7 @@ export class HomeComponent {
 
     removeTool(tool : Tool) {
         this.tools = this.tools.filter(x => x !== tool);
+        this.saveTools();
     }
 
     addTestTool1() {
@@ -114,9 +112,13 @@ export class HomeComponent {
                 tool.ready = ready;
                 tool.markReady = markReady;
             });
-            this.tools = savedTools;
 
-            await Promise.all(this.tools.map(x => x.ready));
+            console.log(savedTools);
+            setTimeout(() => this.tools = savedTools);
+
+            await Promise.all(savedTools.map(x => x.ready));
+            this.tools.forEach(t => this.subscribeToTool(t));
+
             console.log(`All saved tools loaded`);
 
             if (toolState.activeToolId) {
@@ -126,6 +128,7 @@ export class HomeComponent {
                     this.switchToTool(tool);
                 } else {
                     console.log(`Cannot switch to tool '${toolState.activeToolId}': No tool with that ID`);
+                    console.dir(this.tools);
                 }
             }
 
@@ -148,11 +151,22 @@ export class HomeComponent {
         });
     }
 
+    async subscribeToTool(tool : Tool) {
+        console.log(`Subscribed to tool '${tool.toolId}' with ID ${tool.id}.`);
+        tool.component.stateModified.subscribe(() => {
+            console.log(`Tool state updated.`);
+            this.saveTools();
+        });
+    }
+
     async addTool(toolClass : Type<ToolComponent>) {
         let markReady : () => void;
         let ready = new Promise<void>((resolve) => markReady = resolve);
-        let tool = { id: uuid(), toolId: toolClass['id'], componentClass: toolClass, ready, markReady };
+        let tool : Tool = { id: uuid(), toolId: toolClass['id'], componentClass: toolClass, ready, markReady };
         this.tools.push(tool);
+
+        this.subscribeToTool(tool);
+
         await ready;
 
         this.saveTools();

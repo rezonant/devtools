@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HtmlViewComponent, HtmlViewerComponent, JsonViewComponent, JsonViewerComponent, ToolComponent } from ".";
@@ -15,6 +16,9 @@ import { MonacoEditorModule } from "ngx-monaco-editor";
 import { HtmlEntitiesReferenceComponent } from "./html-entities-reference.component";
 import { UrlEncodingReferenceComponent } from "./url-encoding-reference.component";
 import { JwtViewerComponent } from "./jwt-viewer.component";
+import { Wikipedia } from "./wikipedia";
+import { WikipediaComponent } from "./wikipedia.component";
+import { DevtoolsCommonModule } from "../common";
 
 const COMPONENTS = [
     Base64Component,
@@ -22,7 +26,8 @@ const COMPONENTS = [
     HtmlViewerComponent,
     HtmlEntitiesReferenceComponent,
     UrlEncodingReferenceComponent,
-    JwtViewerComponent
+    JwtViewerComponent,
+    WikipediaComponent
 ]
 
 export class ToolRegistry {
@@ -47,13 +52,16 @@ export class ToolRegistry {
         MatInputModule,
         MatMenuModule,
         MatTabsModule,
-        MonacoEditorModule
+        MatProgressSpinnerModule,
+        MonacoEditorModule,
+        DevtoolsCommonModule
     ],
     exports: [
         ToolHostComponent
     ],
     providers: [
-        { provide: ToolRegistry, useValue: new ToolRegistry(COMPONENTS) }
+        { provide: ToolRegistry, useValue: new ToolRegistry(COMPONENTS) },
+        Wikipedia
     ]
 })
 export class ToolsModule {

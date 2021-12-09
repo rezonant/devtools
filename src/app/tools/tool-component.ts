@@ -6,6 +6,11 @@ export abstract class ToolComponent<ToolStateT = any> {
     static label = 'Unnamed Tool';
     static id = 'unnamed';
     visibilityChanged = new Subject<boolean>();
+    stateModified = new Subject<ToolStateT>();
     tool : Tool;
     state : ToolStateT;
+
+    saveState() {
+        this.stateModified.next(this.state);
+    }
 }
