@@ -7,6 +7,7 @@ export interface Tool<T extends ToolComponent = ToolComponent> {
     componentClass : Type<T>;
     componentRef? : ComponentRef<T>;
     component? : T;
+    label? : string;
     ready : Promise<void>;
     markReady : () => void;
     state? : any;

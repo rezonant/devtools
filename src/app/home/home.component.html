@@ -1,4 +1,4 @@
-<header>
+<header id="nav">
     
     <mat-form-field appearance="outline">
       <mat-label>
@@ -33,6 +33,7 @@
 </mat-menu>
 
 <mat-menu #tabMenu="matMenu">
+    <button mat-menu-item (click)="renameTool(contextMenuTool)">Rename</button>
     <button mat-menu-item (click)="removeTool(contextMenuTool)">Close</button>
 </mat-menu>
 
@@ -45,11 +46,11 @@
 
 <div style="display:none;" [matMenuTriggerFor]="tabMenu"></div>
 
-<mat-tab-group #tabs (contextmenu)="handleRightClick($event)" [class.hidden]="!tools?.length">
+<mat-tab-group animationDuration="0ms" id="main-tabs" #tabs (contextmenu)="handleRightClick($event)" [class.hidden]="!tools?.length">
     <mat-tab *ngFor="let tool of tools">
         <ng-template mat-tab-label>
             <span class="tab-label">
-                {{tool.component?.label || 'Loading...'}}
+                {{tool.label || tool.component?.label || 'Loading...'}}
             </span>
             <a class="tab-close" mat-icon-button (click)="removeTool(tool)">
                 <mat-icon>close</mat-icon>

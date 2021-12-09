@@ -1,4 +1,4 @@
-import { Component, Type, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, ElementRef, Type, ViewChild, ViewContainerRef } from "@angular/core";
 import { MatMenu, MatMenuTrigger } from "@angular/material/menu";
 import { MatTabGroup } from "@angular/material/tabs";
 import { Tool, ToolComponent, ToolRegistry } from "../tools";
@@ -18,7 +18,8 @@ export interface SavedToolState {
 export class HomeComponent {
     constructor(
         private viewContainerRef : ViewContainerRef,
-        public toolRegistry : ToolRegistry
+        public toolRegistry : ToolRegistry,
+        private elementRef : ElementRef<HTMLElement>
     ) {
     }
 
@@ -54,6 +55,9 @@ export class HomeComponent {
         });
 
         this.loadTools();
+
+        // let el = this.elementRef.nativeElement;
+        // el.querySelector('mat-tab-group#main-tabs .mat-tab-labels').appendChild(el.querySelector('header#nav'));
     }
 
     handleRightClick(event : MouseEvent) {
@@ -74,6 +78,14 @@ export class HomeComponent {
         let labelElement = element.closest(selector);
         let index = Array.from(labelElement.parentElement.children).indexOf(labelElement);
         this.contextMenuTool = this.tools[index];
+    }
+
+    renameTool(tool : Tool) {
+        let newName = prompt(`New name for tool?`, tool.label || tool.component?.label);
+        if (newName) {
+            tool.label = newName;
+            this.saveTools();
+        }
     }
 
     removeTool(tool : Tool) {
@@ -163,10 +175,9 @@ export class HomeComponent {
         let tool : Tool = { id: uuid(), toolId: toolClass['id'], componentClass: toolClass, ready, markReady };
         this.tools.push(tool);
 
-        this.subscribeToTool(tool);
-
         await ready;
 
+        this.subscribeToTool(tool);
         this.saveTools();
 
         return tool;
