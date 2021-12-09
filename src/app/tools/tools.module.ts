@@ -19,6 +19,7 @@ import { JwtViewerComponent } from "./jwt-viewer.component";
 import { Wikipedia } from "./wikipedia";
 import { WikipediaComponent } from "./wikipedia.component";
 import { DevtoolsCommonModule } from "../common";
+import { WebSocketTesterComponent } from "./websocket-tester.component";
 
 const COMPONENTS = [
     Base64Component,
@@ -27,7 +28,8 @@ const COMPONENTS = [
     HtmlEntitiesReferenceComponent,
     UrlEncodingReferenceComponent,
     JwtViewerComponent,
-    WikipediaComponent
+    WikipediaComponent,
+    WebSocketTesterComponent
 ]
 
 export class ToolRegistry {
