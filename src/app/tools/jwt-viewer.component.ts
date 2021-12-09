@@ -37,10 +37,10 @@ export interface JwtViewerState {
             <h2>
                 Signature
             
-                <div id="validity" [class.valid]="state.valid">
-                    <mat-icon *ngIf="state.valid">done</mat-icon>
-                    <mat-icon *ngIf="!state.valid">close</mat-icon>
-                    {{ state.valid ? 'Valid' : 'Invalid' }}
+                <div id="validity" [class.valid]="state?.valid">
+                    <mat-icon *ngIf="state?.valid">done</mat-icon>
+                    <mat-icon *ngIf="!state?.valid">close</mat-icon>
+                    {{ state?.valid ? 'Valid' : 'Invalid' }}
                 </div>
             </h2>
             
@@ -260,6 +260,9 @@ export class JwtViewerComponent extends ToolComponent<JwtViewerState> {
 
         this.state.jwt = token.string;
         this.state.errorMessage = null;
+
+        this.checkValidity();
+
         this.saveState();
     }
 }

@@ -1,6 +1,10 @@
 import { Component } from "@angular/core";
 import { ToolComponent } from "./tool-component";
 
+export interface HtmlViewerState {
+    html : string;
+}
+
 @Component({
     template: `
         <ngx-monaco-editor 
@@ -45,10 +49,14 @@ import { ToolComponent } from "./tool-component";
         }
     `]
 })
-export class HtmlViewerComponent extends ToolComponent {
+export class HtmlViewerComponent extends ToolComponent<HtmlViewerState> {
     override label = 'HTML Viewer';
     static override label = 'HTML Viewer';
     static override id = 'html-viewer';
+
+    override afterToolInit() {
+        this.parse();
+    }
 
     monacoOptions = {
         theme: 'vs-dark', 
@@ -56,24 +64,27 @@ export class HtmlViewerComponent extends ToolComponent {
         automaticLayout: true
     };
 
-    _code : string;
     get code() {
-        return this._code;
+        return this.state?.html;
     }
 
     set code(value) {
-        this._code = value;
-        setTimeout(() => {
-            try {
-                let parser = new DOMParser();
+        this.state.html = value;
+        setTimeout(() => this.parse())
+    }
 
-                this.doc = parser.parseFromString(this._code, 'text/html');
-                this.errorMessage = null;
-            } catch (e) {
-                this.doc = null;
-                this.errorMessage = e.message;
-            }
-        })
+    parse() {
+        try {
+            let parser = new DOMParser();
+
+            this.doc = parser.parseFromString(this.state.html, 'text/html');
+            this.errorMessage = null;
+        } catch (e) {
+            this.doc = null;
+            this.errorMessage = e.message;
+        } finally {
+            this.saveState();
+        }
     }
 
     doc : Document;

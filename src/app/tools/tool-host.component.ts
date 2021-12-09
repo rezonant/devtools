@@ -37,6 +37,8 @@ export class ToolHostComponent {
 
             if (this._tool.markReady)
                 this._tool.markReady();
+
+            this._tool.component.afterToolInit();
         });
     }
 }

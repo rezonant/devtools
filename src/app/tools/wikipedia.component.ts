@@ -19,7 +19,7 @@ export interface WikipediaState {
         <ng-container *ngIf="loading">
             <mat-spinner></mat-spinner>
         </ng-container>
-        <ng-container *ngIf="!loading">
+        <ng-container *ngIf="!loading && state">
             <form (submit)="state.pageId = null; loadPage()">
                 <mat-form-field appearance="outline" class="search">
                     <span matPrefix>

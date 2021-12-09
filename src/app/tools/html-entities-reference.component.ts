@@ -2,29 +2,36 @@ import { Component } from "@angular/core";
 import { HTML_ENTITIES } from "../references/html-entities";
 import { ToolComponent } from "./tool-component";
 
+export interface HtmlEntitiesState {
+    search : string;
+}
+
 @Component({
     template: `
-        <mat-form-field appearance="outline">
-            <span matPrefix>
-                <mat-icon>search</mat-icon>
-            </span>
-            <input 
-                type="text" 
-                matInput 
-                [(ngModel)]="search"
-                />
-        </mat-form-field>
+        <ng-container *ngIf="state">
+            <mat-form-field appearance="outline">
+                <span matPrefix>
+                    <mat-icon>search</mat-icon>
+                </span>
+                <input 
+                    type="text" 
+                    matInput 
+                    [(ngModel)]="state.search"
+                    (ngModelChange)="saveState()"
+                    />
+            </mat-form-field>
 
-        <div class="entity-list">
-            <div class="entity" *ngFor="let entity of filteredEntities" [title]="entity.name">
-                <i>{{entity.character}}</i>
-                <span>{{entity.entity || ' '}}</span>
-                <span>{{entity.unicode || ' '}}</span>
-                <span>{{entity.hex || ' '}}</span>
-                <span>{{entity.dec || ' '}}</span>
-                <span>{{entity.css || ' '}}</span>
+            <div class="entity-list">
+                <div class="entity" *ngFor="let entity of filteredEntities" [title]="entity.name">
+                    <i>{{entity.character}}</i>
+                    <span>{{entity.entity || ' '}}</span>
+                    <span>{{entity.unicode || ' '}}</span>
+                    <span>{{entity.hex || ' '}}</span>
+                    <span>{{entity.dec || ' '}}</span>
+                    <span>{{entity.css || ' '}}</span>
+                </div>
             </div>
-        </div>
+        </ng-container>
     `,
     styles: [`
         :host {
@@ -86,19 +93,19 @@ export class HtmlEntitiesReferenceComponent extends ToolComponent {
     static override id = 'html-entities';
 
     entities = HTML_ENTITIES;
-    search : string;
 
     get filteredEntities() {
-        if (!this.search)
+        if (!this.state?.search)
             return this.entities;
+        
         return this.entities.filter(x =>
-            x.name.includes(this.search)
-            || x.character.includes(this.search)
-            || x.entity.includes(this.search)
-            || x.unicode.includes(this.search)
-            || x.hex.includes(this.search)
-            || x.dec.includes(this.search)
-            || x.css.includes(this.search)
+            x.name.includes(this.state.search)
+            || x.character.includes(this.state.search)
+            || x.entity.includes(this.state.search)
+            || x.unicode.includes(this.state.search)
+            || x.hex.includes(this.state.search)
+            || x.dec.includes(this.state.search)
+            || x.css.includes(this.state.search)
         );
     }
 }

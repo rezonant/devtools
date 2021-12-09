@@ -2,6 +2,12 @@ import { Component, ViewChild } from "@angular/core";
 import { EditorComponent } from "ngx-monaco-editor";
 import { ToolComponent } from "./tool-component";
 
+export interface JsonViewerState {
+    json : string;
+    object : string;
+    errorMessage : string;
+}
+
 @Component({
     template: `
         <ngx-monaco-editor 
@@ -9,13 +15,13 @@ import { ToolComponent } from "./tool-component";
             [options]="monacoOptions" 
             [(ngModel)]="code"></ngx-monaco-editor>
         
-        <ng-container *ngIf="errorMessage">
+        <ng-container *ngIf="state?.errorMessage">
             <div class="error">
-                {{errorMessage}}
+                {{state.errorMessage}}
             </div>
         </ng-container>
-        <ng-container *ngIf="!errorMessage">
-            <rdt-json-view [object]="object"></rdt-json-view>
+        <ng-container *ngIf="!state?.errorMessage">
+            <rdt-json-view [object]="state?.object"></rdt-json-view>
         </ng-container>
     `,
     styles: [`
@@ -45,7 +51,7 @@ import { ToolComponent } from "./tool-component";
         }
     `]
 })
-export class JsonViewerComponent extends ToolComponent {
+export class JsonViewerComponent extends ToolComponent<JsonViewerState> {
     override label = 'JSON Viewer';
     static override label = 'JSON Viewer';
     static override id = 'json-viewer';
@@ -64,24 +70,22 @@ export class JsonViewerComponent extends ToolComponent {
         })
     }
 
-    _code : string;
     get code() {
-        return this._code;
+        return this.state?.json;
     }
 
     set code(value) {
-        this._code = value;
+        this.state.json = value;
         setTimeout(() => {
             try {
-                this.object = JSON.parse(this._code);
-                this.errorMessage = null;
+                this.state.object = JSON.parse(this.state.json);
+                this.state.errorMessage = null;
             } catch (e) {
-                this.object = null;
-                this.errorMessage = e.message;
+                this.state.object = null;
+                this.state.errorMessage = e.message;
+            } finally {
+                this.saveState();
             }
         })
     }
-
-    object;
-    errorMessage : string;
 }

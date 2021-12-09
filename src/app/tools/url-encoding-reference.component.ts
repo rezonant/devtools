@@ -1,6 +1,9 @@
 import { Component } from "@angular/core";
-import { HTML_ENTITIES } from "../references/html-entities";
 import { ToolComponent } from "./tool-component";
+
+export interface UrlEncodingState {
+    search : string;
+}
 
 export interface EncodedCharacter {
     entity : string;
@@ -12,25 +15,28 @@ export interface EncodedCharacter {
 
 @Component({
     template: `
-        <mat-form-field appearance="outline">
-            <span matPrefix>
-                <mat-icon>search</mat-icon>
-            </span>
-            <input 
-                type="text" 
-                matInput 
-                [(ngModel)]="search"
-                />
-        </mat-form-field>
+        <ng-container *ngIf="state">
+            <mat-form-field appearance="outline">
+                <span matPrefix>
+                    <mat-icon>search</mat-icon>
+                </span>
+                <input 
+                    type="text" 
+                    matInput 
+                    [(ngModel)]="state.search"
+                    (ngModelChange)="saveState()"
+                    />
+            </mat-form-field>
 
-        <div class="entity-list">
-            <div class="entity" *ngFor="let entity of filteredEntities" [title]="entity.name || ''">
-                <i>{{entity.character}}</i>
-                <span>{{entity.entity || ' '}}</span>
-                <span>hex {{entity.hex || ' '}}</span>
-                <span>dec {{entity.dec || ' '}}</span>
+            <div class="entity-list">
+                <div class="entity" *ngFor="let entity of filteredEntities" [title]="entity.name || ''">
+                    <i>{{entity.character}}</i>
+                    <span>{{entity.entity || ' '}}</span>
+                    <span>hex {{entity.hex || ' '}}</span>
+                    <span>dec {{entity.dec || ' '}}</span>
+                </div>
             </div>
-        </div>
+        </ng-container>
     `,
     styles: [`
         :host {
@@ -88,12 +94,11 @@ export interface EncodedCharacter {
         }
     `]
 })
-export class UrlEncodingReferenceComponent extends ToolComponent {
+export class UrlEncodingReferenceComponent extends ToolComponent<UrlEncodingState> {
     override label = 'URL Encoding';
     static override label = 'URL Encoding';
     static override id = 'url-encoding';
     entities : EncodedCharacter[] = [];
-    search : string;
 
     zeroPad(v : string, length : number) {
         v = ''+v;
@@ -127,12 +132,15 @@ export class UrlEncodingReferenceComponent extends ToolComponent {
     }
 
     get filteredEntities() {
-        if (!this.search)
+        if (!this.state?.search)
             return this.entities;
 
-        if (this.search === '%')
+        if (this.state.search === '%')
             return this.entities.filter(x => x.character === '%');
         
-        return this.entities.filter(x => x.name?.includes(this.search) || x.character?.includes(this.search) || x.entity?.includes(this.search))
+        return this.entities.filter(x => x.name?.includes(this.state.search) 
+            || x.character?.includes(this.state.search) 
+            || x.entity?.includes(this.state.search)
+        )
     }
 }

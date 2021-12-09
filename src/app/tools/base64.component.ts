@@ -1,19 +1,24 @@
 import { Component } from "@angular/core";
 import { ToolComponent } from "./tool-component";
 
+export interface Base64State {
+    base64Str : string;
+    rawStr : string;
+}
+
 @Component({
     template: `
-        <div class="splitter">
+        <div class="splitter" *ngIf="state">
             <div>
                 <mat-form-field appearance="outline" floatLabel="always">
                     <mat-label>Raw</mat-label>
-                    <textarea matInput [(ngModel)]="rawStr" (change)="encode()" (keypress)="encode()"></textarea>
+                    <textarea matInput [(ngModel)]="state.rawStr" (change)="encode()" (keypress)="encode()"></textarea>
                 </mat-form-field>
             </div>
             <div>
                 <mat-form-field appearance="outline" floatLabel="always">
                     <mat-label>Base64</mat-label>
-                    <textarea matInput [(ngModel)]="base64Str" (change)="decode()" (keypress)="decode()"></textarea>
+                    <textarea matInput [(ngModel)]="state.base64Str" (change)="decode()" (keypress)="decode()"></textarea>
                 </mat-form-field>
             </div>
         </div>
@@ -47,33 +52,41 @@ import { ToolComponent } from "./tool-component";
 })
 export class Base64Component extends ToolComponent {
     id = Math.floor(Math.random() * 10000);
-    base64Str : string;
-    rawStr : string;
     override label = 'Base64';
     static override id = 'base64';
     static override label = 'Base64';
 
     decode() {
-        if (this.base64Str === '') {
-            this.rawStr = '';
+        if (!this.state)
+            return;
+        
+        if (this.state.base64Str === '') {
+            this.state.rawStr = '';
             return;
         }
         try {
-            this.rawStr = atob(this.base64Str);
+            this.state.rawStr = atob(this.state.base64Str);
         } catch (e) {
-            this.rawStr = `Error: ${e.message}`;
+            this.state.rawStr = `Error: ${e.message}`;
+        } finally {
+            this.saveState();
         }
     }
 
     encode() {
-        if (this.rawStr === '') {
-            this.base64Str = '';
+        if (!this.state)
+            return;
+        
+        if (this.state.rawStr === '') {
+            this.state.base64Str = '';
             return;
         }
         try {
-            this.base64Str = btoa(this.rawStr);
+            this.state.base64Str = btoa(this.state.rawStr);
         } catch (e) {
-            this.base64Str = `Error: ${e.message}`;
+            this.state.base64Str = `Error: ${e.message}`;
+        } finally {
+            this.saveState();
         }
     }
 }
