@@ -187,6 +187,8 @@ export class SessionService {
         return {
             activeToolId: state.activeToolId,
             label: state.label,
+            createdAt: state.createdAt,
+            updatedAt: state.updatedAt,
             tools: state.tools.map(t => (<any>{
                 toolId: t.toolId,
                 id: t.id,
