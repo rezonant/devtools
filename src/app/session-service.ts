@@ -142,6 +142,10 @@ export class SessionService {
     }
 
     private sendSessionState(session : Session) {
+        if (!session) {
+            debugger;
+            return;
+        }
         this.sendBroadcast(<StateBroadcast>{
             type: 'state',
             state: this.prepareStateForSerialization(session.state)
@@ -199,14 +203,20 @@ export class SessionService {
     }
 
     sendState() {
+        if (!this.currentSession)
+            return;
+        
         this.sendSessionState(this.currentSession);
     }
 
     discover() {
+        this.lastDiscoveredAt = Date.now();
         this.sendBroadcast({
             type: 'discover'
         });
     }
+    
+    lastDiscoveredAt : number = 0;
 
     sendBroadcast(broadcast : Broadcast, identity? : TabIdentity) {
         this.channel.postMessage(JSON.parse(JSON.stringify(<BroadcastMessage>{
@@ -221,13 +231,6 @@ export class SessionService {
         return id.split('-')[0];
     }
 
-    closeSession(id : string) {
-        this.sendBroadcast(<CloseBroadcast>{
-            type: 'close',
-            sessionId: id
-        })
-    }
-
     async init() {
         if (this.channel)
             return;
@@ -238,6 +241,18 @@ export class SessionService {
         };
 
         this.discover();
+
+        // Periodically rediscover the state of open sessions. 
+        // We will also factor in when other clients perform discovery.
+        // Add a lot of jitter to reduce the likelihood of a continuous
+        // race of this timer across multiple sessions.
+
+        setTimeout(() => {
+            setInterval(() => {
+                if (this.lastDiscoveredAt + 10*1000 < Date.now())
+                    this.discover();
+            }, 10*1000 + Math.random()*1000);
+        }, Math.random() * 10*1000);
 
         await this.delay(1000);
     
@@ -257,6 +272,22 @@ export class SessionService {
         this.identity = { id };
         await this.loadState();
         this.sendState();
+
+        this.cleanup();
+    }
+
+    cleanup() {
+        for (let session of this.inactiveSessions) {
+            if (!session.state) {
+                this.deleteSavedSession(session);
+                return;
+            }
+
+            let state = session.state;
+
+            if (!state.label && !state.tools?.length)
+                this.deleteSavedSession(session);
+        }
     }
 
     private delay(time : number) {
@@ -274,8 +305,6 @@ export class SessionService {
     private handleBroadcast(event : Broadcast, sender : TabIdentity) {
         let peer : Session;
         let foundPeer = false;
-
-        console.log(`Received broadcast:`, event);
 
         if (sender && sender.id !== this.currentSessionId) {
             if (!this.peerMap.has(sender.id)) {
@@ -322,23 +351,14 @@ export class SessionService {
             }
         } else if (event.type === 'discover') {
             console.log(`[SessionService] A peer is discovering. Sending state...`);
+            this.lastDiscoveredAt = Date.now();
             this.sendState();
         } else if (event.type === 'closed') {
             if (peer) {
                 this.peerMap.delete(peer.id);
                 peer = null;
             }
-        } else if (event.type === 'close') {
-            let closeBroadcast = event as CloseBroadcast;
-            if (closeBroadcast.sessionId === this.currentSessionId) {
-                console.log(`Closing session...`);
-                window.close();
-            }
         }
-
-        if (foundPeer) {
-            console.log(`Found peer: `, peer);
-        } 
 
         if (peer)
             this.peerMap.set(peer.id, peer);
@@ -449,8 +469,6 @@ export class SessionService {
         };
 
         this.currentState.tools ||= [];
-
-        console.log(`Found saved tools. Loading...`);
 
         this.currentTools.forEach(tool => {
             tool.componentClass = this.toolRegistry.tools.find(x => x['id'] === tool.toolId)

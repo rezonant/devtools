@@ -10,15 +10,18 @@ export interface Base64State {
     template: `
         <div class="splitter" *ngIf="state">
             <div>
-                <mat-form-field appearance="outline" floatLabel="always">
+                <mat-form-field class="vertically-sized" appearance="outline" floatLabel="always">
                     <mat-label>Raw</mat-label>
-                    <textarea matInput [(ngModel)]="state.rawStr" (change)="encode()" (keypress)="encode()"></textarea>
+                    <textarea matInput [(ngModel)]="state.rawStr" 
+                        (change)="encode()" (keypress)="encode()"
+                        ></textarea>
                 </mat-form-field>
             </div>
             <div>
-                <mat-form-field appearance="outline" floatLabel="always">
+                <mat-form-field class="vertically-sized" appearance="outline" floatLabel="always">
                     <mat-label>Base64</mat-label>
-                    <textarea matInput [(ngModel)]="state.base64Str" (change)="decode()" (keypress)="decode()"></textarea>
+                    <textarea matInput [(ngModel)]="state.base64Str" 
+                        (change)="decode()" (keypress)="decode()"></textarea>
                 </mat-form-field>
             </div>
         </div>
@@ -46,6 +49,13 @@ export interface Base64State {
                         height: 100%;
                     }
                 }
+            }
+        }
+
+        @media (max-width: 450px) {
+            .splitter {
+                flex-direction: column;
+                max-height: calc(100vh - 12em);
             }
         }
     `]

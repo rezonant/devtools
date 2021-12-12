@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDividerModule } from '@angular/material/divider';
 
@@ -24,6 +25,7 @@ import { DevtoolsCommonModule } from "../common";
 import { WebSocketTesterComponent } from "./websocket-tester.component";
 import { ToolLabelPipe } from "./tool-label.pipe";
 import { ToolRegistry } from "./tool-registry";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 const COMPONENTS = [
     Base64Component,
@@ -55,6 +57,8 @@ const COMPONENTS = [
         MatMenuModule,
         MatTabsModule,
         MatDividerModule,
+        MatTooltipModule,
+        TextFieldModule,
         MatProgressSpinnerModule,
         MonacoEditorModule,
         DevtoolsCommonModule

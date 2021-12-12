@@ -18,18 +18,8 @@ header {
         font-size: 32px;
         font-family: "Khand", sans-serif;
 
-        &.short {
+        .short {
             display: none;
-        }
-    }
-    
-    @media (max-width: 750px) {
-        .logo.long {
-            display: none;
-        }
-
-        .logo.short {
-            display: initial;
         }
     }
 
@@ -43,10 +33,43 @@ header {
         ul {
             margin: 0;
             display: flex;
+            padding-left: 2em;
 
             li {
                 list-style-type: none;
                 margin: 0 1em;
+            }
+        }
+    }
+
+    @media (max-width: 600px) {
+        .logo .long {
+            display: none;
+        }
+
+        .logo .short {
+            display: initial;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .logo {
+            font-size: 20px;
+        }
+    }
+
+    @media (max-width: 450px) {
+        .logo {
+            font-size: 18px;
+        }
+
+        nav {
+            ul {
+                padding-left: 1em;
+
+                li {
+                    margin: 0;
+                }
             }
         }
     }

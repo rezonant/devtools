@@ -5,18 +5,24 @@
         <header>
             <h1>
                 {{session.state?.label || 'Unnamed'}}
+                <button mat-icon-button (click)="renameSession(session)" matTooltip="Rename Session">
+                    <mat-icon>edit</mat-icon>
+                </button>
             </h1>
-            <button mat-icon-button (click)="renameSession(session)" matTooltip="Rename">
-                <mat-icon>edit</mat-icon>
-            </button>
-            <span *ngIf="session === currentSession" class="current-tag">Current</span>
+            
             <div class="spacer"></div>
-            <button mat-icon-button *ngIf="!isActive(session)" (click)="openSessionInNewTab(session)" matTooltip="Open in new tab">
-                <mat-icon>open_in_new</mat-icon>
-            </button>
-            <button mat-icon-button *ngIf="!isActive(session)" (click)="deleteSession(session)" matTooltip="Delete">
-                <mat-icon>close</mat-icon>
-            </button>
+            
+            <ng-container *ngIf="session === currentSession">
+                <span class="current-tag">Current</span>
+            </ng-container>
+            <div class="actions" *ngIf="!isActive(session)">
+                <button mat-icon-button (click)="openSessionInNewTab(session)" matTooltip="Open in new tab">
+                    <mat-icon>open_in_new</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteSession(session)" matTooltip="Delete">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
         </header>
 
         <div class="tools" *ngIf="session.state?.tools">
@@ -25,7 +31,13 @@
             </div>
             <div class="tool" *ngFor="let tool of session.state.tools">
                 <header>
-                    <h2>{{tool | toolLabel}}</h2>
+                    <h2>
+                        {{tool | toolLabel}}
+                        <button mat-icon-button color="primary" matTooltip="Rename tool">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </h2>
+                    
                     <div class="spacer"></div>
                     <div class="actions">
                         <button mat-icon-button color="primary" 

@@ -23,10 +23,7 @@ export class ToolHostComponent {
         if (this._tool.component)
             return;
 
-        console.log(`Creating element...`);
-        let compRef = this.vcr.createComponent(this._tool.componentClass, {
-            
-        });
+        let compRef = this.vcr.createComponent(this._tool.componentClass);
 
         setTimeout(() => {
             this._tool.componentRef = compRef;

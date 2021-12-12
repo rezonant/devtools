@@ -1,17 +1,20 @@
 <header>
-  <div class="logo">
-    @rezonant/tools
-  </div>
+  <a href="/about" class="logo">
+    <span class="long">
+      @rezonant/tools
+    </span>
+    <span class="short">
+      @/tools
+    </span>
+  </a>
   
   <nav>
     <ul>
-      <li><a routerLink="/">App</a></li>
-      <li><a routerLink="/about">About</a></li>
-      <li><a href="https://github.com/rezonant/devtools">GitHub</a></li>
+      <li><a mat-button routerLink="/">App</a></li>
+      <li><a mat-button routerLink="/about">About</a></li>
+      <li><a mat-button href="https://github.com/rezonant/devtools">GitHub</a></li>
     </ul>
   </nav>
-
-  <a mat-button>Sign In</a>
 </header>
 <main>
   <router-outlet></router-outlet>

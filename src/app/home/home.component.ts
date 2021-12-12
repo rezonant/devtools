@@ -87,13 +87,10 @@ export class HomeComponent {
             } finally {
                 loading = false;
             }
-            
-            console.log(`[HOME] Loaded ${this.tools.length} tools`);
 
             if (session.state.activeToolId) {
                 let tool = this.tools.find(x => x.id === session.state.activeToolId);
                 if (tool) {
-                    console.log(`Switching to tool '${session.state.activeToolId}'`);
                     this.switchToTool(tool);
                 } else {
                     console.log(`Cannot switch to tool '${session.state.activeToolId}': No tool with that ID`);
@@ -119,7 +116,6 @@ export class HomeComponent {
         });
 
         await this.sessionService.init();
-        await this.loadTools();
 
         // let el = this.elementRef.nativeElement;
         // el.querySelector('mat-tab-group#main-tabs .mat-tab-labels').appendChild(el.querySelector('header#nav'));
@@ -177,10 +173,6 @@ export class HomeComponent {
         this.tabs.selectedIndex = this.tools.indexOf(tool);
     }
 
-    async loadTools() {
-        this.sessionService.loadState();
-    }
-
     getToolLabel(tool: Tool): string {
         if (!tool)
             return '';
@@ -229,6 +221,10 @@ export class HomeComponent {
             this.sessionService.setSessionLabel(this.sessionService.currentSession, newLabel);
     }
 
+    newSession() {
+        
+    }
+
     manageSessions() {
         this.matDialog.open(ManageSessionsComponent);
     }
@@ -237,10 +233,6 @@ export class HomeComponent {
         this.matDialog.open(ManageSessionComponent, {
             data: { session }
         });
-    }
-
-    closeSession(session : Session) {
-        this.sessionService.closeSession(session.id);
     }
 
     remoteTools : RemoteTool[];

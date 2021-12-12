@@ -129,6 +129,16 @@ export interface JwtViewerState {
                 padding: 1.4em;
             }
         }
+
+        @media (max-width: 1000px) {
+            main {
+                flex-direction: column;
+            }
+
+            #decoded {
+                max-width: initial;
+            }
+        }
     `]
 })
 export class JwtViewerComponent extends ToolComponent<JwtViewerState> {

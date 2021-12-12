@@ -44,37 +44,19 @@
     </a>
 </header>
 
-<mat-menu #sessionMenu="matMenu">
-    <div class="current-session">
-        Current: {{currentSessionLabel || 'Unnamed'}}
-        
-        <div class="actions">
-            <a mat-button (click)="renameSession()">
-                <mat-icon>edit</mat-icon>
-                Rename
-            </a>
-            <a mat-button>
-                <mat-icon>add</mat-icon>
-                New
-            </a>
-        </div>
-    </div>
-
-    <a mat-menu-item *ngFor="let session of sessions" class="with-extra-action" (click)="manageSession(session)">
-        {{session | sessionLabel}}
-        <button mat-icon-button (click)="closeSession(session)">
-            <mat-icon>close</mat-icon>
-        </button>
-    </a>
-
-    <mat-divider></mat-divider>
-
-    <a mat-menu-item (click)="manageSessions()">Manage Sessions</a>
-</mat-menu>
-
 <mat-menu #globalMenu="matMenu">
-    <!-- <button mat-menu-item>Sign In</button> -->
-    <a mat-menu-item [matMenuTriggerFor]="sessionMenu">Sessions</a>
+    <a mat-menu-item (click)="renameSession()">
+        <mat-icon>edit</mat-icon>
+        Rename Session...
+    </a>
+    <a mat-menu-item (click)="newSession()">
+        <mat-icon>add</mat-icon>
+        New Session
+    </a>
+    <a mat-menu-item (click)="manageSessions()">
+        <mat-icon>settings</mat-icon>
+        Manage Sessions...
+    </a>
     <a mat-menu-item routerLink="/about">About</a>
 </mat-menu>
 

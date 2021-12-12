@@ -28,9 +28,8 @@ export interface WebSocketState {
                             </span>
                         </span>
                     </mat-form-field>
-                    <button mat-raised-button (click)="connect()" *ngIf="!isConnected">
+                    <button mat-icon-button (click)="connect()" *ngIf="!isConnected" matTooltip="Connect to Server">
                         <mat-icon>send</mat-icon>
-                        Connect
                     </button>
                 </form>
                 <button mat-button (click)="disconnect()" *ngIf="isConnected">
