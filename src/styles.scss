@@ -87,3 +87,25 @@ pre {
 .mat-form-field-infix.mat-form-field-infix {
     width: initial;
 }
+
+
+pre {
+    border: 1px solid #444;
+    background: #242424;
+    border-radius: 5px;
+    margin: 0.5em 0;
+    padding: 1em;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+code {
+    border: 1px solid #444;
+    background: #242424;
+    border-radius: 5px;
+    margin: 0.5em 0;
+    padding: 0.25em;
+    white-space: pre-wrap;
+    display: inline;
+    word-break: break-all;
+}
