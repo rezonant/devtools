@@ -136,6 +136,13 @@ export interface WebSocketState {
             flex-direction: column;
             gap: 1em;
         }
+
+        @media (max-width: 400px) {
+            header {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     `]
 })
 export class WebSocketTesterComponent extends ToolComponent<WebSocketState> {
