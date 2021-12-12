@@ -30,6 +30,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { NotepadComponent } from "./notepad.component";
 import { WebcamTesterComponent } from "./webcam-tester.component";
 import { CrontabComponent } from "./crontab.component";
+import { BrowserComponent } from "./browser.component";
 
 const COMPONENTS = [
     Base64Component,
@@ -42,7 +43,8 @@ const COMPONENTS = [
     WebSocketTesterComponent,
     NotepadComponent,
     WebcamTesterComponent,
-    CrontabComponent
+    CrontabComponent,
+    BrowserComponent
 ]
 
 @NgModule({
