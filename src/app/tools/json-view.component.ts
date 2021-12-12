@@ -65,6 +65,10 @@ export class JsonViewComponent {
     }
 
     getValueDisplay(value) {
+        if (Array.isArray(value)) {
+            return `Array (${value.length} items)`;
+        }
+
         if (typeof value === 'object') {
             return `Object (${Object.keys(value).length} keys)`;
         }

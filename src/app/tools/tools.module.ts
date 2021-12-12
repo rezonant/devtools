@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 
 import { MatMenuModule } from '@angular/material/menu';
@@ -31,6 +33,7 @@ import { NotepadComponent } from "./notepad.component";
 import { WebcamTesterComponent } from "./webcam-tester.component";
 import { CrontabComponent } from "./crontab.component";
 import { BrowserComponent } from "./browser.component";
+import { RegexComponent } from "./regex.component";
 
 const COMPONENTS = [
     Base64Component,
@@ -44,7 +47,8 @@ const COMPONENTS = [
     NotepadComponent,
     WebcamTesterComponent,
     CrontabComponent,
-    BrowserComponent
+    BrowserComponent,
+    RegexComponent
 ]
 
 @NgModule({
@@ -68,6 +72,8 @@ const COMPONENTS = [
         MatTabsModule,
         MatDividerModule,
         MatTooltipModule,
+        MatSlideToggleModule,
+        MatCheckboxModule,
         TextFieldModule,
         MatProgressSpinnerModule,
         MonacoEditorModule,
