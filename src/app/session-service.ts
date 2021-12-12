@@ -265,8 +265,14 @@ export class SessionService {
                 window.location.hash = id;
             }
         } else {
-            id = this.generateSessionId();
-            window.location.hash = id;
+
+            let sessions = this.inactiveSessions.sort((a, b) => (b.state.updatedAt - a.state.updatedAt));
+            if (sessions.length > 0) {
+                id = sessions[0].id;
+            } else {
+                id = this.generateSessionId();
+                window.location.hash = id;
+            }
         }
 
         this.identity = { id };
