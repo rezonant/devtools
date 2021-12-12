@@ -59,7 +59,7 @@ export class HomeComponent {
     }
 
     get currentSessionLabel() {
-        return this.sessionService.serializedState?.label;
+        return this.sessionService.currentSession?.state?.label;
     }
 
     private subs : Subscription;
@@ -224,9 +224,9 @@ export class HomeComponent {
     }
 
     renameSession() {
-        let newName = prompt(`New name for session:`, this.sessionService.serializedState?.label);
-        this.sessionService.serializedState.label = newName;
-        this.sessionService.saveState();
+        let newLabel = prompt(`New label for session:`, this.sessionService.currentSession.state?.label);
+        if (newLabel)
+            this.sessionService.setSessionLabel(this.sessionService.currentSession, newLabel);
     }
 
     manageSessions() {

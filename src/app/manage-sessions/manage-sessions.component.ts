@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { MatDialogRef } from "@angular/material/dialog";
 import { Session, SessionService } from "../session-service";
 import { Tool } from "../tools";
 
@@ -8,7 +9,8 @@ import { Tool } from "../tools";
 })
 export class ManageSessionsComponent {
     constructor(
-        private sessionService : SessionService
+        private sessionService : SessionService,
+        private matDialogRef : MatDialogRef<ManageSessionsComponent>
     ) {
     }
 
@@ -48,18 +50,21 @@ export class ManageSessionsComponent {
         let label = prompt('New name for session', session.state.label);
         if (!label)
             return;
-        this.sessionService.setSessionLabel(session.id, label);
+        this.sessionService.setSessionLabel(session, label);
     }
 
     openSessionInNewTab(session : Session) {
         window.open(`${window.location.origin}#${session.id}`, '_blank');
     }
 
-    moveToCurrentSession(session : Session, tool : Tool) {
-
+    async moveToCurrentSession(session : Session, tool : Tool) {
+        await this.sessionService.addTool(tool.toolId, tool.label, tool.state);
+        this.sessionService.removeToolFromSession(session, tool);
+        this.matDialogRef.close();
     }
 
-    copyToCurrentSession(tool : Tool) {
-        this.sessionService.addTool(tool.toolId, tool.label, tool.state);
+    async copyToCurrentSession(tool : Tool) {
+        await this.sessionService.addTool(tool.toolId, tool.label, tool.state);
+        this.matDialogRef.close();
     }
 }

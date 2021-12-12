@@ -86,14 +86,17 @@ export class SessionService {
     channel : BroadcastChannel;
     peerMap = new Map<string, Session>();
     identity : TabIdentity;
-    private _serializedState : SessionState;
-
-    get sessionId() {
-        return this.identity?.id;
+    
+    get currentState() {
+        return this.currentSession?.state;
     }
 
-    get serializedState() : SessionState {
-        return this._serializedState;
+    get currentTools() {
+        return this.currentState?.tools;
+    }
+
+    get currentSessionId() {
+        return this.identity?.id;
     }
 
     private _currentSessionStateChanged = new Subject<Session>();
@@ -127,12 +130,22 @@ export class SessionService {
         return `rdt:tools:v2`;
     }
 
-    saveSessionState(id : string, state : SessionState) {
-        if (!state.createdAt)
-            state.createdAt = Date.now();
-        state.updatedAt = Date.now();
-        window.localStorage[`${this.storagePrefix}:${id}`] = JSON.stringify(state);
+    saveSessionState(session : Session) {
+        session.state.createdAt ||= Date.now();
+        session.state.updatedAt = Date.now();
+
+        window.localStorage[`${this.storagePrefix}:${session.id}`] 
+            = JSON.stringify(this.prepareStateForSerialization(session.state));
+
         this.refreshSavedSessions();
+        this.sendSessionState(session);
+    }
+
+    private sendSessionState(session : Session) {
+        this.sendBroadcast(<StateBroadcast>{
+            type: 'state',
+            state: this.prepareStateForSerialization(session.state)
+        }, { id: session.id });
     }
 
     get allSessions() {
@@ -170,11 +183,11 @@ export class SessionService {
         return this.savedSessions.filter(x => x.id !== current?.id && !active.some(y => y.id === x.id));
     }
 
-    set serializedState(value) {
-        this._serializedState = {
-            activeToolId: value.activeToolId,
-            label: value.label,
-            tools: value.tools.map(t => (<any>{
+    prepareStateForSerialization(state : SessionState): SessionState {
+        return {
+            activeToolId: state.activeToolId,
+            label: state.label,
+            tools: state.tools.map(t => (<any>{
                 toolId: t.toolId,
                 id: t.id,
                 label: t.label || t.component?.label || (t.componentClass as any)?.label,
@@ -184,10 +197,7 @@ export class SessionService {
     }
 
     sendState() {
-        this.sendBroadcast(<StateBroadcast>{
-            type: 'state',
-            state: this.serializedState
-        });
+        this.sendSessionState(this.currentSession);
     }
 
     discover() {
@@ -196,10 +206,10 @@ export class SessionService {
         });
     }
 
-    sendBroadcast(broadcast : Broadcast) {
+    sendBroadcast(broadcast : Broadcast, identity? : TabIdentity) {
         this.channel.postMessage(JSON.parse(JSON.stringify(<BroadcastMessage>{
             type: 'broadcast',
-            sender: this.identity,
+            sender: identity || this.identity,
             broadcast
         })));
     }
@@ -265,7 +275,7 @@ export class SessionService {
 
         console.log(`Received broadcast:`, event);
 
-        if (sender && sender.id !== this.sessionId) {
+        if (sender && sender.id !== this.currentSessionId) {
             if (!this.peerMap.has(sender.id)) {
                 console.log(`[SessionService] Found peer ${sender.id}`);
                 this.peerMap.set(sender.id, peer = sender);
@@ -277,25 +287,26 @@ export class SessionService {
         }
 
         if (event.type === 'state') {
-            if (this.sessionId && sender?.id === this.sessionId) {
+            if (this.currentSessionId && sender?.id === this.currentSessionId) {
                 let state = (event as StateBroadcast).state;
 
                 console.log(`[SessionService] Local state (${sender.id}) is being updated by remote:`, state);
 
-                if (!this.currentSession.state) {
+                let currentState = this.currentSession.state;
+                if (!currentState) {
                     console.error(`Cannot update my own state! No state present!`);
                     return;
                 }
 
-                this.currentSession.state.label = state.label;
-                this.currentSession.state.updatedAt = Date.now();
+                currentState.label = state.label;
+                currentState.updatedAt = Date.now();
             
                 let index = -1;
                 for (let tool of state.tools) {
                     index += 1;
-                    let existingTool = this._serializedState.tools.find(x => x.id === tool.id);
+                    let existingTool = currentState.tools.find(x => x.id === tool.id);
                     if (!existingTool) {
-                        this._serializedState.tools.splice(index, 0, tool);
+                        currentState.tools.splice(index, 0, tool);
                     } else {
                         existingTool.state = tool.state;
                     }
@@ -317,7 +328,7 @@ export class SessionService {
             }
         } else if (event.type === 'close') {
             let closeBroadcast = event as CloseBroadcast;
-            if (closeBroadcast.sessionId === this.sessionId) {
+            if (closeBroadcast.sessionId === this.currentSessionId) {
                 console.log(`Closing session...`);
                 window.close();
             }
@@ -380,42 +391,10 @@ export class SessionService {
         this.refreshSavedSessions();
     }
 
-    setSessionLabel(sessionId : string, label : string) {
-        if (sessionId === this.sessionId) {
-            console.log(`Changing my own label to '${label}'`);
-            if (!this.currentSession?.state) {
-                console.error(`Cannot change my own label: No state present!`);
-                return;
-            }
-            this.currentSession.state.label = label;
-            this.serializedState = this.currentSession.state;
-            this.saveSessionState(sessionId, this._serializedState);
-            this.sendState()
-        } else if (this.activeSessions.some(x => x.id === sessionId)) {
-            let session = this.activeSessions.find(x => x.id === sessionId);
-
-            // Save the session direct to localStorage in case the tab that has the active session
-            // is nonresponsive or closed (ie on mobile), and also notify that tab so that it can update 
-            // its view 
-
-            session.state.label = label;
-            session.state.updatedAt = Date.now();
-            this.saveSessionState(sessionId, session.state);
-            
-            this.channel.postMessage(<BroadcastMessage<StateBroadcast>>{
-                type: 'broadcast',
-                sender: { id: sessionId },
-                broadcast: {
-                    type: 'state',
-                    state: session.state
-                }
-            })
-        } else {
-            // Saved session
-            let session = this.savedSessions.find(x => x.id === sessionId);
-            session.state.label = label;
-            this.saveSessionState(sessionId, session.state);
-        }
+    setSessionLabel(session : Session, label : string) {
+        session.state.label = label;
+        session.state.updatedAt = Date.now();
+        this.saveSessionState(session);
     }
 
     async addTool(toolClass : string | Type<ToolComponent>, label? : string, state? : any) {
@@ -452,36 +431,26 @@ export class SessionService {
     }
 
     saveState() {
-        console.log(`Saving tools...`);
-        console.log(`Label:`, this.serializedState?.label);
-        this.serializedState = this.currentSession.state;
-        this.saveSessionState(this.sessionId, this.serializedState);
-        this.sendState();
+        this.saveSessionState(this.currentSession);
         this._currentSessionStateChanged.next(this.currentSession);
     }
 
     async loadState() {
-        let sessionId = this.sessionId;
-        let toolState = this.loadSessionState(sessionId) || <SessionState>{ activeToolId: null };
-        toolState.tools = (toolState.tools || []).filter(x => x);
+        let sessionId = this.currentSessionId;
+        let state = this.loadSessionState(sessionId) || <SessionState>{ activeToolId: null };
+        state.tools = (state.tools || []).filter(x => x);
 
         this.currentSession = {
             id: sessionId,
             active: true,
-            state: toolState 
+            state: state || <SessionState>{ tools: [] }
         };
 
-        if (!toolState) {
-            console.log(`No saved tools found for session ${sessionId}.`);
-            this.saveState();
-            return;
-        }
-
-        let savedTools = toolState.tools;
-        this.serializedState = toolState;
+        this.currentState.tools ||= [];
 
         console.log(`Found saved tools. Loading...`);
-        savedTools.forEach(tool => {
+
+        this.currentTools.forEach(tool => {
             tool.componentClass = this.toolRegistry.tools.find(x => x['id'] === tool.toolId)
             let markReady : () => void;
             let ready = new Promise<void>((resolve) => markReady = resolve);
@@ -490,11 +459,8 @@ export class SessionService {
         });
 
         this._currentSessionStateChanged.next(this.currentSession);
-        await Promise.all(savedTools.map(x => x.ready));
+        await Promise.all(this.currentTools.map(x => x.ready));
         this.currentSession.state.tools.forEach(t => this.subscribeToTool(t));
-
-        console.log(`All saved tools loaded`);
-
         this._currentSessionStateChanged.next(this.currentSession);
         this.sendState();
     }
@@ -508,5 +474,11 @@ export class SessionService {
     setToolLabel(tool : Tool, label : string) {
         tool.label = label;
         this.saveState();
+    }
+
+    removeToolFromSession(session : Session, tool : Tool) {
+        let state = session.state;
+        state.tools = state.tools.filter(x => x.id !== tool.id);
+        this.saveSessionState(session);
     }
 }
