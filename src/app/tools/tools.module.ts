@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDividerModule } from '@angular/material/divider';
@@ -26,6 +27,8 @@ import { WebSocketTesterComponent } from "./websocket-tester.component";
 import { ToolLabelPipe } from "./tool-label.pipe";
 import { ToolRegistry } from "./tool-registry";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { NotepadComponent } from "./notepad.component";
+import { WebcamTesterComponent } from "./webcam-tester.component";
 
 const COMPONENTS = [
     Base64Component,
@@ -35,7 +38,9 @@ const COMPONENTS = [
     UrlEncodingReferenceComponent,
     JwtViewerComponent,
     WikipediaComponent,
-    WebSocketTesterComponent
+    WebSocketTesterComponent,
+    NotepadComponent,
+    WebcamTesterComponent
 ]
 
 @NgModule({
@@ -53,6 +58,7 @@ const COMPONENTS = [
         MatButtonModule,
         MatFormFieldModule,
         MatIconModule,
+        MatSelectModule,
         MatInputModule,
         MatMenuModule,
         MatTabsModule,
