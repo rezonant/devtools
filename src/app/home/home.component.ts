@@ -111,8 +111,11 @@ export class HomeComponent {
             if (newTool?.component)
                 newTool.component.visibilityChanged.next(true);
             this.activeTool = newTool;
-            this.sessionService.currentSession.state.activeToolId = this.activeTool?.id;
-            this.sessionService.saveState();
+
+            if (this.sessionService.currentSession.state.activeToolId !== this.activeTool?.id) {
+                this.sessionService.currentSession.state.activeToolId = this.activeTool?.id;
+                this.sessionService.saveState();
+            }
         });
 
         await this.sessionService.init();
