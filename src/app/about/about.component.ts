@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ToolRegistry } from "../tools";
 
 @Component({
     template: `
@@ -6,13 +7,15 @@ import { Component } from "@angular/core";
             <h1>All your dev tooling in one spot</h1>
             <div>
                 <code>@rezonant/devtools</code> is the hacker's companion. 
-                <a href="https://github.com/rezonant/devtools">Open source</a>. 
+                <a href="https://github.com/rezonant/devtools" target="_blank">Open source</a>. 
+                Featuring <span class="count">{{count}}</span> tools!
             </div>
         </header>
     `,
     styles: [
         `
         header {
+            margin-top: 5em;
             height: 10em;
             display: flex;
             flex-direction: column;
@@ -24,9 +27,23 @@ import { Component } from "@angular/core";
                 font-weight: 100;
             }
         }
+
+        .count {
+            font-size: 135%;
+            font-weight: bold;
+            color: #00ffb7;
+            position: relative;
+            top: 2px;
+        }
         `
     ]
 })
 export class AboutComponent {
+    constructor(private toolRegistry : ToolRegistry) {
 
+    }
+
+    get count() {
+        return this.toolRegistry.tools.length;
+    }
 }
