@@ -12,3 +12,11 @@ export interface Tool<T extends ToolComponent = ToolComponent> {
     markReady : () => void;
     state? : any;
 }
+
+export interface SessionState {
+    activeToolId : string;
+    label? : string;
+    tools: Tool[];
+    createdAt? : number;
+    updatedAt? : number;
+}

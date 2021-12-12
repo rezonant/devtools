@@ -7,6 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDividerModule } from '@angular/material/divider';
+
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from "@angular/common";
@@ -20,6 +22,8 @@ import { Wikipedia } from "./wikipedia";
 import { WikipediaComponent } from "./wikipedia.component";
 import { DevtoolsCommonModule } from "../common";
 import { WebSocketTesterComponent } from "./websocket-tester.component";
+import { ToolLabelPipe } from "./tool-label.pipe";
+import { ToolRegistry } from "./tool-registry";
 
 const COMPONENTS = [
     Base64Component,
@@ -32,17 +36,13 @@ const COMPONENTS = [
     WebSocketTesterComponent
 ]
 
-export class ToolRegistry {
-    constructor(readonly tools : Type<ToolComponent>[]) {
-    }
-}
-
 @NgModule({
     declarations: [
         ToolHostComponent,
         JsonViewComponent,
         HtmlViewComponent,
         TestTool1Component,
+        ToolLabelPipe,
         ...COMPONENTS
     ],
     imports: [
@@ -54,12 +54,14 @@ export class ToolRegistry {
         MatInputModule,
         MatMenuModule,
         MatTabsModule,
+        MatDividerModule,
         MatProgressSpinnerModule,
         MonacoEditorModule,
         DevtoolsCommonModule
     ],
     exports: [
-        ToolHostComponent
+        ToolHostComponent,
+        ToolLabelPipe
     ],
     providers: [
         { provide: ToolRegistry, useValue: new ToolRegistry(COMPONENTS) },

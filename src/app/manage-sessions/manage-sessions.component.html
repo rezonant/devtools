@@ -1,0 +1,85 @@
+<h1>Manage Sessions</h1>
+
+<ng-template #sessionTemplate let-session="session">
+    <div class="session">
+        <header>
+            <h1>
+                {{session.state?.label || 'Unnamed'}}
+            </h1>
+            <button mat-icon-button (click)="renameSession(session)" matTooltip="Rename">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <span *ngIf="session === currentSession" class="current-tag">Current</span>
+            <div class="spacer"></div>
+            <button mat-icon-button *ngIf="!isActive(session)" (click)="openSessionInNewTab(session)" matTooltip="Open in new tab">
+                <mat-icon>open_in_new</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="!isActive(session)" (click)="deleteSession(session)" matTooltip="Delete">
+                <mat-icon>close</mat-icon>
+            </button>
+        </header>
+
+        <div class="tools" *ngIf="session.state?.tools">
+            <div class="no-tools" *ngIf="!session.state.tools?.length">
+                <em>No tools running</em>
+            </div>
+            <div class="tool" *ngFor="let tool of session.state.tools">
+                <header>
+                    <h2>{{tool | toolLabel}}</h2>
+                    <div class="spacer"></div>
+                    <div class="actions">
+                        <button mat-icon-button color="primary" 
+                            matTooltip="Move to current session" 
+                            (click)="moveToCurrentSession(session, tool)">
+                            <mat-icon>arrow_backward</mat-icon>
+                        </button>
+                        <button mat-icon-button color="primary" matTooltip="Copy to current session" (click)="copyToCurrentSession(tool)">
+                            <mat-icon>content_copy</mat-icon>
+                        </button>
+                        <button mat-icon-button color="primary" matTooltip="Delete">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                        <button mat-icon-button color="primary" matTooltip="JSON" (click)="showJsonForTool(tool)">
+                            <mat-icon>code</mat-icon>
+                        </button>
+                    </div>
+                </header>
+
+                <ng-container *ngIf="tool === showJsonTool">
+                    <pre>{{tool | json }}</pre>
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="facts">
+            <div class="fact">{{session.id}}</div>
+            <div class="fact">Updated {{ session.state?.updatedAt | date : 'short' }}</div>
+            <div class="fact">Created {{ session.state?.createdAt | date : 'short' }}</div>
+        </div>
+    </div>
+</ng-template>
+
+<mat-tab-group>
+    <mat-tab label="Active">
+        <div class="sessions">
+            <ng-container 
+                    [ngTemplateOutlet]="sessionTemplate"
+                    [ngTemplateOutletContext]="{ session: currentSession }"
+                    ></ng-container>
+            <ng-container 
+                *ngFor="let session of activeSessions"
+                [ngTemplateOutlet]="sessionTemplate"
+                [ngTemplateOutletContext]="{ session: session }"
+                ></ng-container>
+        </div>
+    </mat-tab>
+    <mat-tab label="Saved">
+        <div class="sessions">
+            <ng-container 
+                *ngFor="let session of savedSessions"
+                [ngTemplateOutlet]="sessionTemplate"
+                [ngTemplateOutletContext]="{ session: session }"
+                ></ng-container>
+        </div>
+    </mat-tab>
+</mat-tab-group>

@@ -29,3 +29,25 @@ a {
         text-decoration: none;
     }
 }
+
+.mat-menu-item .mat-button-wrapper .mat-icon {
+    margin-right: 0;
+}
+.mat-menu-item .mat-button-wrapper .mat-icon {
+    margin-right: 0;
+}
+
+.mat-menu-item.with-extra-action {
+    position: relative;
+    padding-right: 46px;
+
+    button {
+        position: absolute;
+        right: 6px;
+        top: 2px;
+    }
+}
+
+.spacer {
+    flex-grow: 1;
+}

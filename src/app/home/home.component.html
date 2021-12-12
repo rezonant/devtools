@@ -10,12 +10,29 @@
         <a routerLink="/about" class="logo short">
             @/tools
         </a>
+
+        <ng-container *ngIf="currentSessionLabel">
+            &raquo;
+            {{currentSessionLabel}}
+        </ng-container>
         </mat-label>
       <span matPrefix>
         <mat-icon>search</mat-icon>
       </span>
       <input matInput type="text" name="search" [(ngModel)]="createdTool" [matAutocomplete]="toolList" />
       <mat-autocomplete #toolList="matAutocomplete" [displayWith]="getToolLabel">
+        <mat-option *ngFor="let remoteTool of filteredRemoteTools" [value]="remoteTool.tool" class="remote-tool">
+            <span class="label">
+                {{remoteTool.tool | toolLabel}}
+            </span>
+            from 
+            <span class="session">
+                {{remoteTool.session | sessionLabel}}
+            </span>
+        </mat-option>
+
+        <mat-divider></mat-divider>
+
         <mat-option *ngFor="let tool of filteredTools" [value]="tool">
           {{tool['label']}}
         </mat-option>
@@ -27,8 +44,37 @@
     </a>
 </header>
 
+<mat-menu #sessionMenu="matMenu">
+    <div class="current-session">
+        Current: {{currentSessionLabel || 'Unnamed'}}
+        
+        <div class="actions">
+            <a mat-button (click)="renameSession()">
+                <mat-icon>edit</mat-icon>
+                Rename
+            </a>
+            <a mat-button>
+                <mat-icon>add</mat-icon>
+                New
+            </a>
+        </div>
+    </div>
+
+    <a mat-menu-item *ngFor="let session of sessions" class="with-extra-action" (click)="manageSession(session)">
+        {{session | sessionLabel}}
+        <button mat-icon-button (click)="closeSession(session)">
+            <mat-icon>close</mat-icon>
+        </button>
+    </a>
+
+    <mat-divider></mat-divider>
+
+    <a mat-menu-item (click)="manageSessions()">Manage Sessions</a>
+</mat-menu>
+
 <mat-menu #globalMenu="matMenu">
     <!-- <button mat-menu-item>Sign In</button> -->
+    <a mat-menu-item [matMenuTriggerFor]="sessionMenu">Sessions</a>
     <a mat-menu-item routerLink="/about">About</a>
 </mat-menu>
 

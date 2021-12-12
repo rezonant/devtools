@@ -32,7 +32,7 @@ export class AppComponent {
     );
     
     this.router.events.subscribe(ev => {
-      this.isHome = this.router.url === '/';
+      this.isHome = this.router.url.replace(/#.*/, '') === '/';
     });
   }
 }

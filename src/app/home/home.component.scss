@@ -59,3 +59,23 @@ header {
 .hidden {
     display: none !important;
 }
+
+.current-session {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5em;
+    padding: 0.5em;
+    border: 1px solid #666;
+
+    .actions {
+        display: flex;
+        gap: 0.5em;
+    }
+}
+
+mat-option.remote-tool {
+    background: #1a3f34;
+    .session {
+        color: #00ffb7;
+    }
+}

@@ -1,6 +1,7 @@
 export * from './tool-component';
 export * from './tool';
 export * from './tool-host.component';
+export * from './tool-registry';
 
 export * from './test-tool-1.component';
 export * from './base64.component';

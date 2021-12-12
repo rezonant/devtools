@@ -1,0 +1,7 @@
+<h1>Manage Session</h1>
+
+<div class="tools" *ngIf="session?.state?.tools">
+    <div class="tool" *ngFor="let tool of session.state.tools">
+        {{getLabelForTool(tool)}}
+    </div>
+</div>
