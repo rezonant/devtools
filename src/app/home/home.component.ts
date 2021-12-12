@@ -99,23 +99,39 @@ export class HomeComponent {
             }
         });
 
+        let tabSwitchTimeout;
         this.tabs.selectedTabChange.subscribe(ev => {
-            if (loading)
-                return;
+
+            // A timeout is needed here because it seems there is a bug, or at least a quirk,
+            // in this event. 
+            // Setting `selectedIndex = 1` yields two events:
+            // 1. selectedTabChange(ev.index === 0)
+            // 2. selectedTabChange(ev.index === 1)
+            //
+            // This will cause an infinite loop, as this event will cause the state to be saved,
+            // and then selectedIndex will be set to a different value, which will cause this event,
+            // etc etc
             
-            let oldTool = this.activeTool || this.tools[0];
-            let newTool = this.tools[ev.index];
+            clearTimeout(tabSwitchTimeout);
+            tabSwitchTimeout = setTimeout(() => {
+                if (loading)
+                    return;
+                
+                let oldTool = this.activeTool || this.tools[0];
+                let newTool = this.tools[ev.index];
 
-            if (oldTool?.component)
-                oldTool.component.visibilityChanged.next(false);
-            if (newTool?.component)
-                newTool.component.visibilityChanged.next(true);
-            this.activeTool = newTool;
+                if (oldTool?.component)
+                    oldTool.component.visibilityChanged.next(false);
+                if (newTool?.component)
+                    newTool.component.visibilityChanged.next(true);
+                this.activeTool = newTool;
 
-            if (this.sessionService.currentSession.state.activeToolId !== this.activeTool?.id) {
-                this.sessionService.currentSession.state.activeToolId = this.activeTool?.id;
-                this.sessionService.saveState();
-            }
+                if (this.sessionService.currentSession.state.activeToolId !== this.activeTool?.id) {
+                    console.log(`Updating active tool in state from ${this.sessionService.currentSession.state.activeToolId} to ${this.activeTool?.id}...`);
+                    this.sessionService.currentSession.state.activeToolId = this.activeTool?.id;
+                    this.sessionService.saveState();
+                }
+            })
         });
 
         await this.sessionService.init();
