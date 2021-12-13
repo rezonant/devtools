@@ -37,6 +37,7 @@ import { RegexComponent } from "./regex.component";
 import { RandomComponent } from "./random.component";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { CalculatorComponent } from "./calculator.component";
+import { UnitsComponent } from "./units.component";
 
 const COMPONENTS = [
     Base64Component,
@@ -53,7 +54,8 @@ const COMPONENTS = [
     BrowserComponent,
     RegexComponent,
     RandomComponent,
-    CalculatorComponent
+    CalculatorComponent,
+    UnitsComponent
 ]
 
 @NgModule({
