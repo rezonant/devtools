@@ -65,19 +65,25 @@ export class HomeComponent {
     private subs : Subscription;
     activeTool : Tool;
 
+    updateRemoteTools() {
+        this.remoteTools = [].concat(
+            ...this.sessionService.allSessions
+                .map(s => (s.state?.tools || [])
+                    .map(t => (<RemoteTool>{ tool: t, session: s }))
+                )
+        );
+    }
+
     async ngAfterViewInit() {
         this.subs = new Subscription();
 
         let loading = false;
 
         this.sessionService.remoteSessionStateChanged.subscribe(async session => {
-            this.remoteTools = [].concat(
-                ...this.sessionService.allSessions
-                    .map(s => (s.state?.tools || [])
-                        .map(t => (<RemoteTool>{ tool: t, session: s }))
-                    )
-            );
+            this.updateRemoteTools();
         });
+
+        this.updateRemoteTools();
 
         this.sessionService.currentSessionStateChanged.subscribe(async session => {
             loading = true;
