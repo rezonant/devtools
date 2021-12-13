@@ -104,6 +104,7 @@ export interface RandomState {
             display: flex;
             align-items: baseline;
             gap: 1em;
+            flex-direction: row;
         }
 
         mat-form-field.type {
@@ -115,6 +116,22 @@ export interface RandomState {
         .items {
             .item {
                 font-family: monospace;
+            }
+        }
+
+        @media (max-width: 900px) {
+            header {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 400px) {
+            header {
+                flex-wrap: none;
+                flex-direction: column;
+                mat-form-field {
+                    width: 100%;
+                }
             }
         }
     `]
