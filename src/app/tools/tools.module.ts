@@ -34,6 +34,8 @@ import { WebcamTesterComponent } from "./webcam-tester.component";
 import { CrontabComponent } from "./crontab.component";
 import { BrowserComponent } from "./browser.component";
 import { RegexComponent } from "./regex.component";
+import { RandomComponent } from "./random.component";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 const COMPONENTS = [
     Base64Component,
@@ -48,7 +50,8 @@ const COMPONENTS = [
     WebcamTesterComponent,
     CrontabComponent,
     BrowserComponent,
-    RegexComponent
+    RegexComponent,
+    RandomComponent
 ]
 
 @NgModule({
@@ -73,6 +76,7 @@ const COMPONENTS = [
         MatDividerModule,
         MatTooltipModule,
         MatSlideToggleModule,
+        MatAutocompleteModule,
         MatCheckboxModule,
         TextFieldModule,
         MatProgressSpinnerModule,
