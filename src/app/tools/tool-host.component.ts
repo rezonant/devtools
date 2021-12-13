@@ -29,13 +29,21 @@ export class ToolHostComponent {
             this._tool.componentRef = compRef;
             this._tool.component = compRef.instance;
             this._tool.component.tool = this._tool;
-            this._tool.state = this._tool.state || {};
-            this._tool.component.state = this._tool.state;
+            this._tool.state = this._tool.state;
 
-            if (this._tool.markReady)
-                this._tool.markReady();
+            if (!this._tool.state) {
+                this._tool.state = {};
+                this._tool.component.state = this._tool.state;
+                this._tool.component.initState();
+                this._tool.state = this._tool.component.state;
+            } else {
+                this._tool.component.state = this._tool.state;
+            }
 
             this._tool.component.afterToolInit();
+            
+            if (this._tool.markReady)
+                this._tool.markReady();
         });
     }
 }

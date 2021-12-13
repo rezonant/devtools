@@ -36,6 +36,7 @@ import { BrowserComponent } from "./browser.component";
 import { RegexComponent } from "./regex.component";
 import { RandomComponent } from "./random.component";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { CalculatorComponent } from "./calculator.component";
 
 const COMPONENTS = [
     Base64Component,
@@ -51,7 +52,8 @@ const COMPONENTS = [
     CrontabComponent,
     BrowserComponent,
     RegexComponent,
-    RandomComponent
+    RandomComponent,
+    CalculatorComponent
 ]
 
 @NgModule({

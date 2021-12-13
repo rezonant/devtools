@@ -17,4 +17,7 @@ export abstract class ToolComponent<ToolStateT = any> {
 
     afterToolInit() {
     }
+
+    initState() {
+    }
 }
