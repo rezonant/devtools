@@ -211,6 +211,9 @@ export class UnitsComponent extends ToolComponent<UnitsState> {
     }
 
     get units(): string[] {
+        if (!this.state.unitType || UNITS[this.state.unitType])
+            return [];
+        
         return Object.keys(UNITS[this.state.unitType]).filter(x => !x.startsWith('$'));
     }
 
