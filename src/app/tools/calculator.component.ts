@@ -33,6 +33,18 @@ export interface CalculatorState {
             <pre *ngIf="inspect">{{state?.value | json}}</pre>
             <pre *ngIf="!inspect">{{state?.value}}</pre>
         </ng-container>
+
+        <h1>Reference</h1>
+        <p>All Javascript expressions are supported. There are also a number of convenience functions:</p>
+        <ul>
+            <li>All <code>Math.*</code> members are made available at the top level. For instance, you can run 
+            <code>PI * 2</code> or <code>min(1,2,3)</code></li>
+            <li><code>array(n)</code> creates an array of <code>n</code> elements filled with zero</li>
+            <li><code>range(first, last)</code> creates an array with the given start and end value and all values 
+                between. Also see <code>inclusiveRange()</code> and <code>exclusiveRange()</code></li>
+            <li><code>keys(o)</code> is a shortcut for <code>Object.keys(o)</code></li>
+            <li><code>values(o)</code> is a shortcut for <code>Object.values(o)</code></li>
+        </ul>
     `,
     styles: [`
         header {
@@ -69,13 +81,13 @@ export class CalculatorComponent extends ToolComponent<CalculatorState> {
     static override id = 'calculator';
 
     get expression() { return this.state?.expression; }
-    set expression(value) { this.state.expression = value; this.evaluate(); this.saveState(); }
+    set expression(value) { this.state.expression = value; if (this.autoEvaluate) this.evaluate(); }
 
     get inspect() { return this.state?.inspect; }
-    set inspect(value) { this.state.inspect = value; this.evaluate(); this.saveState(); }
+    set inspect(value) { this.state.inspect = value; if (this.autoEvaluate) this.evaluate(); }
 
     get autoEvaluate() { return this.state?.autoEvaluate; }
-    set autoEvaluate(value) { this.state.autoEvaluate = value; this.evaluate(); this.saveState(); }
+    set autoEvaluate(value) { this.state.autoEvaluate = value; this.saveState(); }
 
     get inspected() {
         return JSON.stringify(this.state.value, undefined, 2);
@@ -123,11 +135,15 @@ export class CalculatorComponent extends ToolComponent<CalculatorState> {
             let inclusiveRange = (first, last) => array(last - first + 1).map((_, i) => first + i)
             let exclusiveRange = (first, last) => array(last - first).map((_, i) => first + i)
             let range = inclusiveRange;
+            let keys = o => Object.keys(o);
+            let values = o => Object.values(o);
             
             this.state.errorMessage = null;
-            this.state.value = eval(this.expression);
+            this.state.value = eval(`(${this.expression})`);
         } catch (e) {
             this.state.errorMessage = e.message;
+        } finally {
+            this.saveState();
         }
     }
 }
