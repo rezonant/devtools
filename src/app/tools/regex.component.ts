@@ -63,7 +63,7 @@ export interface RegexState {
                     </div>
                     <div class="spacer"></div>
                     <div class="option-set second">
-                        <mat-slide-toggle [(ngModel)]="stripR">Strip \\r</mat-slide-toggle>
+                        <mat-slide-toggle [(ngModel)]="stripR">Strip \r</mat-slide-toggle>
                         <mat-slide-toggle [(ngModel)]="rawResults">Raw Results</mat-slide-toggle>
                     </div>
                 </div>
@@ -123,6 +123,7 @@ export interface RegexState {
             }
         }
 
+        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
         mat-tab-group {
             flex-grow: 1;
         }

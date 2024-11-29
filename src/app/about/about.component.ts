@@ -14,28 +14,28 @@ import { ToolRegistry } from "../tools";
     `,
     styles: [
         `
-        header {
-            margin-top: 5em;
-            height: 10em;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            h1 {
-                font-size: 40px;
-                font-weight: 100;
-            }
-        }
-
-        .count {
-            font-size: 135%;
-            font-weight: bold;
-            color: #00ffb7;
-            position: relative;
-            top: 2px;
-        }
-        `
+                 header {
+                     margin-top: 5em;
+                     height: 10em;
+                     display: flex;
+                     flex-direction: column;
+                     align-items: center;
+                     justify-content: center;
+         
+                     h1 {
+                         font-size: 40px;
+                         font-weight: 100;
+                     }
+                 }
+         
+                 .count {
+                     font-size: 135%;
+                     font-weight: bold;
+                     color: #00ffb7;
+                     position: relative;
+                     top: 2px;
+                 }
+                 `
     ]
 })
 export class AboutComponent {

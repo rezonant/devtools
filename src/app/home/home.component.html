@@ -15,8 +15,8 @@
             &raquo;
             {{currentSessionLabel}}
         </ng-container>
-        </mat-label>
-      <span matPrefix>
+      </mat-label>
+      <span matPrefix class="mat-prefix-icon">
         <mat-icon>search</mat-icon>
       </span>
       <input matInput type="text" name="search" [(ngModel)]="createdTool" [matAutocomplete]="toolList" />
@@ -74,7 +74,7 @@
 
 <div style="display:none;" [matMenuTriggerFor]="tabMenu"></div>
 
-<mat-tab-group animationDuration="0ms" id="main-tabs" #tabs (contextmenu)="handleRightClick($event)" [class.hidden]="!tools?.length">
+<mat-tab-group [mat-stretch-tabs]="false" animationDuration="0ms" id="main-tabs" #tabs (contextmenu)="handleRightClick($event)" [class.hidden]="!tools?.length">
     <mat-tab *ngFor="let tool of tools">
         <ng-template mat-tab-label>
             <span class="tab-label">

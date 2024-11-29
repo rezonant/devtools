@@ -5,7 +5,7 @@
 
 $accent-color: #00ffb7;
 
-html, body { height: 100%; }
+html, body { height: 100%; } 
 body { 
     margin: 0; 
     font-family: Roboto, "Helvetica Neue", sans-serif;
@@ -16,11 +16,11 @@ body {
 }
 * { box-sizing: border-box; }
 
-.mat-tab-body-wrapper {
+.mat-mdc-tab-body-wrapper {
     flex-grow: 1;
 }
 
-.mat-tab-body-content {
+.mat-mdc-tab-body-content {
     display: flex;
     flex-direction: column;
 }
@@ -32,14 +32,7 @@ a {
     }
 }
 
-.mat-menu-item .mat-button-wrapper .mat-icon {
-    margin-right: 0;
-}
-.mat-menu-item .mat-button-wrapper .mat-icon {
-    margin-right: 0;
-}
-
-.mat-menu-item.with-extra-action {
+.mat-mdc-menu-item.with-extra-action {
     position: relative;
     padding-right: 46px;
 
@@ -54,7 +47,7 @@ a {
     flex-grow: 1;
 }
 
-.mat-menu-item {
+.mat-mdc-menu-item {
     &, &:active, &:visited, &:hover, &:focus {
         color: white;
     }
@@ -66,17 +59,22 @@ pre {
 }
 
 @media (max-width: 500px) {
-    .mat-dialog-container.mat-dialog-container {
+    .mat-mdc-dialog-container.mat-dialog-container {
         padding: 12px;
     }
 }
 
-.mat-form-field.vertically-sized {
+.mat-mdc-form-field.vertically-sized {
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-wrapper {
         height: 100%;
+        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
         .mat-form-field-flex {
             height: 100%;
-
+            /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
             .mat-form-field-infix {
                 height: 100%;
             }
@@ -84,6 +82,7 @@ pre {
     }
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .mat-form-field-infix.mat-form-field-infix {
     width: initial;
 }
@@ -113,4 +112,8 @@ code {
 pre.error-message {
     background: #463337;
     border-color: #745359;
+}
+
+.mat-prefix-icon {
+    margin-left: 0.75em;
 }

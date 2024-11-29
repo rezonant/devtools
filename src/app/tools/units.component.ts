@@ -142,7 +142,7 @@ const UNITS = {
                         <mat-label></mat-label>
                         <input matInput name="aValue" type="number" [(ngModel)]="state.aValue" (ngModelChange)="evaluateA()">
                     </mat-form-field>
-                    <mat-form-field class="unit" floatLabel="never">
+                    <mat-form-field class="unit" floatLabel="always">
                         <mat-select name="aUnit" [(ngModel)]="state.aUnit" (ngModelChange)="evaluateA()" placeholder="unit">
                             <mat-option *ngFor="let unit of units" [value]="unit">{{unit}}</mat-option>
                         </mat-select>
@@ -152,7 +152,7 @@ const UNITS = {
                         <mat-label></mat-label>
                         <input matInput name="aValue" type="number" [(ngModel)]="state.bValue" (ngModelChange)="evaluateB()">
                     </mat-form-field>
-                    <mat-form-field floatLabel="never" class="unit">
+                    <mat-form-field floatLabel="always" class="unit">
                         <mat-label>Unit</mat-label>
                         <mat-select name="aUnit" [(ngModel)]="state.bUnit" (ngModelChange)="saveState()" placeholder="unit" (ngModelChange)="evaluateA()">
                             <mat-option *ngFor="let unit of units" [value]="unit">{{unit}}</mat-option>
