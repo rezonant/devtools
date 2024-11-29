@@ -19,7 +19,7 @@ import { HomeComponent } from './home/home.component';
 import { ToolsModule } from './tools';
 import { AboutComponent } from './about/about.component';
 import { FormsModule } from '@angular/forms';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { MonacoEditorModule } from '@astronautlabs/monaco';
 import { SessionService } from './session-service';
 import { ManageSessionsComponent } from './manage-sessions/manage-sessions.component';
 import { NewSessionComponent } from './new-session/new-session.component';

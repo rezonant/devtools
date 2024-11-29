@@ -24,7 +24,7 @@
     "@astronautlabs/jwt": "^0.0.12",
     "@types/jsdom": "^16.2.13",
     "jsdom": "^19.0.0",
-    "ngx-monaco-editor": "^12.0.0",
+    "@astronautlabs/monaco": "^14.0.2",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "wtf_wikipedia": "^9.0.2",

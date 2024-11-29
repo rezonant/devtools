@@ -18,7 +18,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HtmlViewComponent, HtmlViewerComponent, JsonViewComponent, JsonViewerComponent, ToolComponent } from ".";
-import { MonacoEditorModule } from "ngx-monaco-editor";
+import { MonacoEditorModule } from "@astronautlabs/monaco";
 import { HtmlEntitiesReferenceComponent } from "./html-entities-reference.component";
 import { UrlEncodingReferenceComponent } from "./url-encoding-reference.component";
 import { JwtViewerComponent } from "./jwt-viewer.component";
