@@ -1,5 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
-import { EditorComponent } from "ngx-monaco-editor";
+import { EditorComponent } from "@astronautlabs/monaco";
 import { ToolComponent } from "./tool-component";
 
 export interface JsonViewerState {
