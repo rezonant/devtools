@@ -50,7 +50,8 @@ export interface HtmlViewerState {
                 }
             }
         }
-    `]
+    `],
+    standalone: false
 })
 export class HtmlViewerComponent extends ToolComponent<HtmlViewerState> {
     override label = 'HTML Viewer';

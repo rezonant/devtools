@@ -193,7 +193,8 @@ export interface RegexState {
                 flex-direction: column;
             }
         }
-    `]
+    `],
+    standalone: false
 })
 export class RegexComponent extends ToolComponent<RegexState> {
     override label = 'Regex';

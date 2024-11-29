@@ -153,7 +153,8 @@ export interface WebSocketState {
                 align-items: center;
             }
         }
-    `]
+    `],
+    standalone: false
 })
 export class WebSocketTesterComponent extends ToolComponent<WebSocketState> {
     override label = 'WebSocket';

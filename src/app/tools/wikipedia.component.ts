@@ -100,7 +100,8 @@ export interface WikipediaState {
                 }
             }
         }
-    `]
+    `],
+    standalone: false
 })
 export class WikipediaComponent extends ToolComponent<WikipediaState> {
     override label = 'Wikipedia';

@@ -45,7 +45,8 @@ export interface BrowserState {
             flex-grow: 1;
             border: 1px solid #666;
         }
-    `]
+    `],
+    standalone: false
 })
 export class BrowserComponent extends ToolComponent {
     constructor(

@@ -136,7 +136,8 @@ export interface RandomState {
                 }
             }
         }
-    `]
+    `],
+    standalone: false
 })
 export class RandomComponent extends ToolComponent<RandomState> {
     override label = 'Random';

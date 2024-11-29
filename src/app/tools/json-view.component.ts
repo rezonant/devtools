@@ -39,7 +39,8 @@ import { Component, Input } from "@angular/core";
         .invisible {
             visibility: hidden;
         }
-    `]
+    `],
+    standalone: false
 })
 export class JsonViewComponent {
     _object;

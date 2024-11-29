@@ -14,7 +14,8 @@ import { ToolComponent } from "./tool-component";
 +————- min (0 – 59)
 </pre>
     `,
-    styles: ['']
+    styles: [''],
+    standalone: false
 })
 export class CrontabComponent extends ToolComponent {
     override label = 'Crontab';

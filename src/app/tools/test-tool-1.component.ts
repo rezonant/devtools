@@ -3,7 +3,8 @@ import { ToolComponent } from "./tool-component";
 
 @Component({
     template: `Test Tool 1 [{{testId}}]`,
-    styles: ['']
+    styles: [''],
+    standalone: false
 })
 export class TestTool1Component extends ToolComponent {
     testId = Math.floor(Math.random() * 10000);

@@ -23,7 +23,8 @@ export interface NotepadState {
             flex-grow: 1;
             margin: 1em;
         }
-    `]
+    `],
+    standalone: false
 })
 export class NotepadComponent extends ToolComponent<NotepadState> {
     override label = 'Notepad';

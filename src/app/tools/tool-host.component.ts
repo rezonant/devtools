@@ -4,7 +4,8 @@ import { Tool } from "./tool";
 @Component({
     selector: 'rdt-tool-host',
     template: '',
-    styles: [``]
+    styles: [``],
+    standalone: false
 })
 export class ToolHostComponent {
     constructor(private vcr : ViewContainerRef) {

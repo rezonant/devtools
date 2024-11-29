@@ -5,7 +5,8 @@ import { Tool } from "../tools";
 
 @Component({
     templateUrl: './manage-sessions.component.html',
-    styleUrls: ['./manage-sessions.component.scss']
+    styleUrls: ['./manage-sessions.component.scss'],
+    standalone: false
 })
 export class ManageSessionsComponent {
     constructor(

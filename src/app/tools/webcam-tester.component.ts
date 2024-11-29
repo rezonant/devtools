@@ -80,7 +80,8 @@ export interface WebcamTesterState {
                 flex-grow: 1;
             }
         }
-    `]
+    `],
+    standalone: false
 })
 export class WebcamTesterComponent extends ToolComponent<WebcamTesterState> {
     override label = 'Webcam';

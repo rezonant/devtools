@@ -36,7 +36,8 @@ import { ToolRegistry } from "../tools";
                      top: 2px;
                  }
                  `
-    ]
+    ],
+    standalone: false
 })
 export class AboutComponent {
     constructor(private toolRegistry : ToolRegistry) {

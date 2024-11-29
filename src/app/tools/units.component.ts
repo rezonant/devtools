@@ -204,7 +204,8 @@ const UNITS = {
         mat-form-field.unit {
             width: 4em;
         }
-    `]
+    `],
+    standalone: false
 })
 export class UnitsComponent extends ToolComponent<UnitsState> {
     override label = 'Units';

@@ -3,7 +3,8 @@ import { Session, SessionService } from "./session-service";
 
 @Pipe({
     name: 'sessionLabel',
-    pure: false
+    pure: false,
+    standalone: false
 })
 export class SessionLabelPipe {
     constructor(

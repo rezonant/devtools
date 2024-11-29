@@ -52,7 +52,8 @@ export interface JsonViewerState {
                 }
             }
         }
-    `]
+    `],
+    standalone: false
 })
 export class JsonViewerComponent extends ToolComponent<JsonViewerState> {
     override label = 'JSON Viewer';

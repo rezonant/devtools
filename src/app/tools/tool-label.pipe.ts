@@ -4,7 +4,8 @@ import { Tool } from "./tool";
 
 @Pipe({
     name: 'toolLabel',
-    pure: false
+    pure: false,
+    standalone: false
 })
 export class ToolLabelPipe {
     constructor(

@@ -93,7 +93,8 @@ export interface EncodedCharacter {
             }
 
         }
-    `]
+    `],
+    standalone: false
 })
 export class UrlEncodingReferenceComponent extends ToolComponent<UrlEncodingState> {
     override label = 'URL Encoding';

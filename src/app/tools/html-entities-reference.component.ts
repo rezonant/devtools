@@ -86,7 +86,8 @@ export interface HtmlEntitiesState {
                 }
             }
         }
-    `]
+    `],
+    standalone: false
 })
 export class HtmlEntitiesReferenceComponent extends ToolComponent {
     override label = 'HTML Entities';

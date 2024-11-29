@@ -79,7 +79,8 @@ export interface CalculatorState {
                 flex-grow: 1;
             }
         }
-    `]
+    `],
+    standalone: false
 })
 export class CalculatorComponent extends ToolComponent<CalculatorState> {
     override label = 'Calculator';

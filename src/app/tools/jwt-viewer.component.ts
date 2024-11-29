@@ -146,7 +146,8 @@ export interface JwtViewerState {
                 max-width: initial;
             }
         }
-    `]
+    `],
+    standalone: false
 })
 export class JwtViewerComponent extends ToolComponent<JwtViewerState> {
     override label = 'JWT Viewer';

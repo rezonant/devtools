@@ -60,7 +60,8 @@ export interface Base64State {
                 max-height: calc(100vh - 12em);
             }
         }
-    `]
+    `],
+    standalone: false
 })
 export class Base64Component extends ToolComponent {
     id = Math.floor(Math.random() * 10000);
