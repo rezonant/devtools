@@ -21,17 +21,11 @@ export interface WikipediaState {
         } @else {
           <form (submit)="state.pageId = null; loadPage()">
             <mat-form-field appearance="outline" class="search">
-              <span matPrefix>
-                <mat-icon>search</mat-icon>
-              </span>
               <mat-label>
                 <img class="logo" src="/assets/wikipedia-wordmark.svg" alt="Wikipedia" />
-                <!-- <ng-container *ngIf="state.title">
-                &raquo;
-                {{state.title}}
-                </ng-container> -->
               </mat-label>
-            <input type="text" matInput name="search" [(ngModel)]="state.query" placeholder="Search for pages" />
+              <mat-icon matPrefix>search</mat-icon>
+              <input type="text" matInput name="search" [(ngModel)]="state.query" placeholder="Search for pages" />
             </mat-form-field>
           </form>
           @if (state.pageId) {

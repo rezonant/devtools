@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
+@use './theme.scss';
 @import url('https://fonts.googleapis.com/css2?family=Khand:wght@300;500;700&display=swap');
-@import './theme.scss';
 
 $accent-color: #00ffb7;
 
@@ -112,8 +112,4 @@ code {
 pre.error-message {
     background: #463337;
     border-color: #745359;
-}
-
-.mat-prefix-icon {
-    margin-left: 0.75em;
 }

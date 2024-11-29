@@ -24,9 +24,10 @@ header {
     .logo {
         font-size: 16px;
         font-family: "Khand", sans-serif;
+        pointer-events: none;
 
         &.short {
-            display: none;
+            display: none;   
         }
     }
     
@@ -73,4 +74,16 @@ mat-option.remote-tool {
     .session {
         color: #00ffb7;
     }
+}
+
+.tool-bar {
+    display: flex;
+    align-items: center;
+}
+
+::ng-deep .mat-mdc-tab.tool-tab-dragging {
+    overflow: hidden;
+    transform: scale(2);
+    background: rgba(0,0,0,0.1);
+    backdrop-filter: blur(4px);
 }

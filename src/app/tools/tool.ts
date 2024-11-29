@@ -1,5 +1,6 @@
 import { ComponentRef, Type } from "@angular/core";
-import { ToolComponent } from ".";
+import { ToolComponent, ToolHostComponent } from ".";
+import { MatTab } from "@angular/material/tabs";
 
 export interface Tool<T extends ToolComponent = ToolComponent> {
     id? : string;
@@ -7,6 +8,8 @@ export interface Tool<T extends ToolComponent = ToolComponent> {
     componentClass : Type<T>;
     componentRef? : ComponentRef<T>;
     component? : T;
+    tab?: MatTab;
+    host?: ToolHostComponent;
     label? : string;
     ready : Promise<void>;
     markReady : () => void;

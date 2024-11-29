@@ -16,9 +16,7 @@
         {{currentSessionLabel}}
       }
     </mat-label>
-    <span matPrefix class="mat-prefix-icon">
-      <mat-icon>search</mat-icon>
-    </span>
+    <mat-icon matPrefix>search</mat-icon>
     <input matInput type="text" name="search" [(ngModel)]="createdTool" [matAutocomplete]="toolList" />
     <mat-autocomplete #toolList="matAutocomplete" [displayWith]="getToolLabel">
       @for (remoteTool of filteredRemoteTools; track remoteTool) {
@@ -78,18 +76,47 @@
 
 <div style="display:none;" [matMenuTriggerFor]="tabMenu"></div>
 
-<mat-tab-group [mat-stretch-tabs]="false" animationDuration="0ms" id="main-tabs" #tabs (contextmenu)="handleRightClick($event)" [class.hidden]="!tools?.length">
-  @for (tool of tools; track tool) {
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <span class="tab-label">
-          {{tool.label || tool.component?.label || 'Loading...'}}
-        </span>
-        <a class="tab-close" mat-icon-button (click)="removeTool(tool)">
-          <mat-icon>close</mat-icon>
-        </a>
-      </ng-template>
-      <rdt-tool-host [tool]="tool"></rdt-tool-host>
+<mat-tab-group 
+    cdkDropList
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="dropTab($event)"
+    cdkDropListElementContainer=".mat-mdc-tab-labels"
+    [mat-stretch-tabs]="false" 
+    [preserveContent]="true"
+    animationDuration="0"
+    id="main-tabs" 
+    #tabs 
+    (contextmenu)="handleRightClick($event)" 
+    [class.hidden]="!tools?.length"
+    (selectedIndexChange)="tools[$event]?.host?.wasActivated(); selectedTabIndex = $event"
+    [selectedIndex]="selectedTabIndex"
+    >
+  @for (tool of tools; track tool.id) {
+    <mat-tab #tab (load)="tool.tab = tab">
+        <ng-template mat-tab-label>
+            <span 
+                class="tab-label"
+                cdkDrag
+                cdkDragPreviewClass="tool-tab-dragging"
+                cdkDragRootElement=".mat-mdc-tab">
+                {{tool.label || tool.component?.label || 'Loading...'}}
+            </span>
+            <a class="tab-close" mat-icon-button (click)="removeTool(tool)">
+                <mat-icon>close</mat-icon>
+            </a>
+        </ng-template>
+
+        <div class="tool-bar">
+            <div class="spacer"></div>
+            <button mat-icon-button (click)="reload()" matTooltip="Reload this tool">
+                <mat-icon>refresh</mat-icon>
+            </button>
+        </div>
+        @if (!reloading) {
+            <rdt-tool-host [tool]="tool"></rdt-tool-host>
+        } @else {
+            Reloading
+        }
     </mat-tab>
   }
 </mat-tab-group>

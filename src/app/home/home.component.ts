@@ -11,6 +11,7 @@ import { ManageSessionComponent } from "../manage-session/manage-session.compone
 import { Subscription } from "rxjs";
 import { ToolLabelPipe } from "../tools/tool-label.pipe";
 import { SessionLabelPipe } from "../session-label.pipe";
+import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 
 export interface RemoteTool {
     tool : Tool;
@@ -46,6 +47,13 @@ export class HomeComponent {
     tools : Tool[] = [];
 
     contextMenuTool : Tool;
+
+    reloading = false;
+
+    reload() {
+        this.reloading = true;
+        setTimeout(() => this.reloading = false, 1);
+    }
 
     @ViewChild('tabs')
     tabs : MatTabGroup;
@@ -196,7 +204,7 @@ export class HomeComponent {
     async switchToTool(tool : Tool) {
         if (!this.tools.includes(tool))
             return;
-        this.tabs.selectedIndex = this.tools.indexOf(tool);
+        this.selectedTabIndex = this.tools.indexOf(tool);
     }
 
     getToolLabel(tool: Tool): string {
@@ -259,6 +267,16 @@ export class HomeComponent {
         this.matDialog.open(ManageSessionComponent, {
             data: { session }
         });
+    }
+
+    selectedTabIndex: number = 0;
+
+    dropTab(event: CdkDragDrop<string[]>) {
+        const prevActive = this.tools[this.selectedTabIndex];
+        moveItemInArray(this.tools, event.previousIndex, event.currentIndex);
+        this.selectedTabIndex = this.tools.indexOf(prevActive);
+
+        this.sessionService.saveSessionState(this.session);
     }
 
     remoteTools : RemoteTool[];

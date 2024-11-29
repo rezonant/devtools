@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { HomeComponent } from './home/home.component';
 import { ToolsModule } from './tools';
@@ -50,6 +51,7 @@ import { SessionLabelPipe } from './session-label.pipe';
     MatAutocompleteModule,
     MatDialogModule,
     MatTooltipModule,
+    DragDropModule,
     MonacoEditorModule.forRoot({
       baseUrl: './assets'
     }),

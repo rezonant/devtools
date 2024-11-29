@@ -27,7 +27,7 @@
     "@astronautlabs/monaco": "^17.0.1",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
-    "wtf_wikipedia": "^10.3.2",
+    "wtf_wikipedia": "^9.0.1",
     "wtf-plugin-html": "^0.2.3",
     "zone.js": "~0.15.0"
   },
