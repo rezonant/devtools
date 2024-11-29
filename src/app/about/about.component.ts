@@ -6,7 +6,7 @@ import { ToolRegistry } from "../tools";
         <header>
             <h1>All your dev tooling in one spot</h1>
             <div>
-                <code>@rezonant/devtools</code> is the hacker's companion. 
+                <code>&#64;rezonant/devtools</code> is the hacker's companion. 
                 <a href="https://github.com/rezonant/devtools" target="_blank">Open source</a>. 
                 Featuring <span class="count">{{count}}</span> tools!
             </div>
