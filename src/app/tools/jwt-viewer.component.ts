@@ -14,49 +14,56 @@ export interface JwtViewerState {
 
 @Component({
     template: `
-    <main>
-        <section id="encoded">
-            <h1>Encoded</h1>
-            <ngx-monaco-editor 
-                #monaco
-                [options]="encodingMonacoOpts" 
-                [(ngModel)]="jwt"></ngx-monaco-editor>
-        </section>
-        <section id="decoded">
-            <h1>Decoded</h1>
-            <h2>Header: Algorithm & Token Type</h2>
-            <ngx-monaco-editor 
-                #monaco
-                [options]="monacoOptions" 
-                [(ngModel)]="headerString"></ngx-monaco-editor>
-            <h2>Payload: Data</h2>
-            <ngx-monaco-editor 
-                #monaco
-                [options]="monacoOptions" 
-                [(ngModel)]="claimsString"></ngx-monaco-editor>
-            <h2>
+        <main>
+            <section id="encoded">
+                <h1>Encoded</h1>
+                <ngx-monaco-editor
+                    #monaco
+                    [options]="encodingMonacoOpts"
+                    [(ngModel)]="jwt" 
+                    />
+            </section>
+            <section id="decoded">
+                <h1>Decoded</h1>
+                <h2>Header: Algorithm & Token Type</h2>
+                <ngx-monaco-editor
+                    #monaco
+                    [options]="monacoOptions"
+                    [(ngModel)]="headerString"
+                    />
+                <h2>Payload: Data</h2>
+                <ngx-monaco-editor
+                    #monaco
+                    [options]="monacoOptions"
+                    [(ngModel)]="claimsString"
+                    />
+                <h2>
                 Signature
             
                 <div id="validity" [class.valid]="state?.valid">
-                    <mat-icon *ngIf="state?.valid">done</mat-icon>
-                    <mat-icon *ngIf="!state?.valid">close</mat-icon>
+                    @if (state?.valid) {
+                        <mat-icon>done</mat-icon>
+                    }
+                    @if (!state?.valid) {
+                        <mat-icon>close</mat-icon>
+                    }
                     {{ state?.valid ? 'Valid' : 'Invalid' }}
                 </div>
-            </h2>
+                </h2>
             
-            <pre id="signature">{{signature || ''}}</pre>
-
-            <mat-form-field appearance="outline" floatLabel="always">
+                <pre id="signature">{{signature || ''}}</pre>
+            
+                <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Secret</mat-label>
                 <textarea type="text" matInput [(ngModel)]="signingKey" placeholder="ABCDEF"></textarea>
-            </mat-form-field>
-        </section>
-    </main>
-    <footer>
-        <div id="status">
-            {{state?.errorMessage}} &nbsp;
-        </div>
-    </footer>
+                </mat-form-field>
+            </section>
+        </main>
+        <footer>
+            <div id="status">
+                {{state?.errorMessage}} &nbsp;
+            </div>
+        </footer>
     `,
     styles: [`
     

@@ -130,43 +130,48 @@ const UNITS = {
 @Component({
     template: `
         <header>
-            <ng-container *ngIf="state">
+            @if (state) {
                 <mat-form-field appearance="outline" floatLabel="always" class="unit-type">
-                    <mat-label>Unit Type</mat-label>
-                    <mat-select name="unitType" [(ngModel)]="state.unitType" (ngModelChange)="saveState()">
-                        <mat-option *ngFor="let unitType of unitTypes" [value]="unitType">{{unitTypeLabel(unitType)}}</mat-option>
-                    </mat-select>
+                <mat-label>Unit Type</mat-label>
+                <mat-select name="unitType" [(ngModel)]="state.unitType" (ngModelChange)="saveState()">
+                    @for (unitType of unitTypes; track unitType) {
+                        <mat-option [value]="unitType">{{unitTypeLabel(unitType)}}</mat-option>
+                    }
+                </mat-select>
                 </mat-form-field>
                 <div class="conversion">
-                    <mat-form-field appearance="outline" floatLabel="always">
-                        <mat-label></mat-label>
-                        <input matInput name="aValue" type="number" [(ngModel)]="state.aValue" (ngModelChange)="evaluateA()">
-                    </mat-form-field>
-                    <mat-form-field class="unit" floatLabel="always">
-                        <mat-select name="aUnit" [(ngModel)]="state.aUnit" (ngModelChange)="evaluateA()" placeholder="unit">
-                            <mat-option *ngFor="let unit of units" [value]="unit">{{unit}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-icon>arrow_forward</mat-icon>
-                    <mat-form-field appearance="outline" floatLabel="always">
-                        <mat-label></mat-label>
-                        <input matInput name="aValue" type="number" [(ngModel)]="state.bValue" (ngModelChange)="evaluateB()">
-                    </mat-form-field>
-                    <mat-form-field floatLabel="always" class="unit">
-                        <mat-label>Unit</mat-label>
-                        <mat-select name="aUnit" [(ngModel)]="state.bUnit" (ngModelChange)="saveState()" placeholder="unit" (ngModelChange)="evaluateA()">
-                            <mat-option *ngFor="let unit of units" [value]="unit">{{unit}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
-                    <button mat-button (click)="swap()">
-                        <mat-icon>swap_horiz</mat-icon>
-                        Swap
-                    </button>
+                <mat-form-field appearance="outline" floatLabel="always">
+                    <mat-label></mat-label>
+                    <input matInput name="aValue" type="number" [(ngModel)]="state.aValue" (ngModelChange)="evaluateA()">
+                </mat-form-field>
+                <mat-form-field class="unit" floatLabel="always">
+                    <mat-select name="aUnit" [(ngModel)]="state.aUnit" (ngModelChange)="evaluateA()" placeholder="unit">
+                    @for (unit of units; track unit) {
+                        <mat-option [value]="unit">{{unit}}</mat-option>
+                    }
+                    </mat-select>
+                </mat-form-field>
+                <mat-icon>arrow_forward</mat-icon>
+                <mat-form-field appearance="outline" floatLabel="always">
+                    <mat-label></mat-label>
+                    <input matInput name="aValue" type="number" [(ngModel)]="state.bValue" (ngModelChange)="evaluateB()">
+                </mat-form-field>
+                <mat-form-field floatLabel="always" class="unit">
+                    <mat-label>Unit</mat-label>
+                    <mat-select name="aUnit" [(ngModel)]="state.bUnit" (ngModelChange)="saveState()" placeholder="unit" (ngModelChange)="evaluateA()">
+                    @for (unit of units; track unit) {
+                        <mat-option [value]="unit">{{unit}}</mat-option>
+                    }
+                    </mat-select>
+                </mat-form-field>
+                <button mat-button (click)="swap()">
+                    <mat-icon>swap_horiz</mat-icon>
+                    Swap
+                </button>
                 </div>
-            </ng-container>
+            }
         </header>
-    `,
+        `,
     styles: [`
         :host {
             display: block;

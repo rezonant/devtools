@@ -1,92 +1,98 @@
 <header id="nav">
-    
-    <mat-form-field appearance="outline">
-      <mat-label>
-        <!-- Tools ({{toolRegistry.tools.length}}) -->
-        
-        <a routerLink="/about" class="logo long">
-            &#64;rezonant/tools
-        </a>
-        <a routerLink="/about" class="logo short">
-            &#64;/tools
-        </a>
 
-        <ng-container *ngIf="currentSessionLabel">
-            &raquo;
-            {{currentSessionLabel}}
-        </ng-container>
-      </mat-label>
-      <span matPrefix class="mat-prefix-icon">
-        <mat-icon>search</mat-icon>
-      </span>
-      <input matInput type="text" name="search" [(ngModel)]="createdTool" [matAutocomplete]="toolList" />
-      <mat-autocomplete #toolList="matAutocomplete" [displayWith]="getToolLabel">
-        <mat-option *ngFor="let remoteTool of filteredRemoteTools" [value]="remoteTool.tool" class="remote-tool">
-            <span class="label">
-                {{remoteTool.tool | toolLabel}}
-            </span>
-            from 
-            <span class="session">
-                {{remoteTool.session | sessionLabel}}
-            </span>
+  <mat-form-field appearance="outline">
+    <mat-label>
+      <!-- Tools ({{toolRegistry.tools.length}}) -->
+
+      <a routerLink="/about" class="logo long">
+        &#64;rezonant/tools
+      </a>
+      <a routerLink="/about" class="logo short">
+        &#64;/tools
+      </a>
+
+      @if (currentSessionLabel) {
+        &raquo;
+        {{currentSessionLabel}}
+      }
+    </mat-label>
+    <span matPrefix class="mat-prefix-icon">
+      <mat-icon>search</mat-icon>
+    </span>
+    <input matInput type="text" name="search" [(ngModel)]="createdTool" [matAutocomplete]="toolList" />
+    <mat-autocomplete #toolList="matAutocomplete" [displayWith]="getToolLabel">
+      @for (remoteTool of filteredRemoteTools; track remoteTool) {
+        <mat-option [value]="remoteTool.tool" class="remote-tool">
+          <span class="label">
+            {{remoteTool.tool | toolLabel}}
+          </span>
+          from
+          <span class="session">
+            {{remoteTool.session | sessionLabel}}
+          </span>
         </mat-option>
+      }
 
-        <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
 
-        <mat-option *ngFor="let tool of filteredTools" [value]="tool">
+      @for (tool of filteredTools; track tool) {
+        <mat-option [value]="tool">
           {{tool['label']}}
         </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-  
-    <a mat-icon-button [matMenuTriggerFor]="globalMenu">
-        <mat-icon>more_vert</mat-icon>
-    </a>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <a mat-icon-button [matMenuTriggerFor]="globalMenu">
+    <mat-icon>more_vert</mat-icon>
+  </a>
 </header>
 
 <mat-menu #globalMenu="matMenu">
-    <a mat-menu-item (click)="renameSession()">
-        <mat-icon>edit</mat-icon>
-        Rename Session...
-    </a>
-    <a mat-menu-item (click)="newSession()">
-        <mat-icon>add</mat-icon>
-        New Session
-    </a>
-    <a mat-menu-item (click)="manageSessions()">
-        <mat-icon>settings</mat-icon>
-        Manage Sessions...
-    </a>
-    <a mat-menu-item routerLink="/about">About</a>
+  <a mat-menu-item (click)="renameSession()">
+    <mat-icon>edit</mat-icon>
+    Rename Session...
+  </a>
+  <a mat-menu-item (click)="newSession()">
+    <mat-icon>add</mat-icon>
+    New Session
+  </a>
+  <a mat-menu-item (click)="manageSessions()">
+    <mat-icon>settings</mat-icon>
+    Manage Sessions...
+  </a>
+  <a mat-menu-item routerLink="/about">About</a>
 </mat-menu>
 
 <mat-menu #tabMenu="matMenu">
-    <button mat-menu-item (click)="renameTool(contextMenuTool)">Rename</button>
-    <button mat-menu-item (click)="removeTool(contextMenuTool)">Close</button>
+  <button mat-menu-item (click)="renameTool(contextMenuTool)">Rename</button>
+  <button mat-menu-item (click)="removeTool(contextMenuTool)">Close</button>
 </mat-menu>
 
 <div style="visibility: hidden; position: fixed"
-    [style.left]="contextMenuPosition.x"
-    [style.top]="contextMenuPosition.y"
-    [matMenuTriggerFor]="tabMenu"
-    #tabMenuTrigger="matMenuTrigger"
-    ></div>
+  [style.left]="contextMenuPosition.x"
+  [style.top]="contextMenuPosition.y"
+  [matMenuTriggerFor]="tabMenu"
+  #tabMenuTrigger="matMenuTrigger"
+></div>
 
 <div style="display:none;" [matMenuTriggerFor]="tabMenu"></div>
 
 <mat-tab-group [mat-stretch-tabs]="false" animationDuration="0ms" id="main-tabs" #tabs (contextmenu)="handleRightClick($event)" [class.hidden]="!tools?.length">
-    <mat-tab *ngFor="let tool of tools">
-        <ng-template mat-tab-label>
-            <span class="tab-label">
-                {{tool.label || tool.component?.label || 'Loading...'}}
-            </span>
-            <a class="tab-close" mat-icon-button (click)="removeTool(tool)">
-                <mat-icon>close</mat-icon>
-            </a>
-        </ng-template>
-        <rdt-tool-host [tool]="tool"></rdt-tool-host>
+  @for (tool of tools; track tool) {
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">
+          {{tool.label || tool.component?.label || 'Loading...'}}
+        </span>
+        <a class="tab-close" mat-icon-button (click)="removeTool(tool)">
+          <mat-icon>close</mat-icon>
+        </a>
+      </ng-template>
+      <rdt-tool-host [tool]="tool"></rdt-tool-host>
     </mat-tab>
+  }
 </mat-tab-group>
-<ng-container *ngIf="!tools?.length">
-    Search for a tool above to get started.
-</ng-container>
+@if (!tools?.length) {
+  Search for a tool above to get started.
+}

@@ -1,7 +1,11 @@
 <h1>Manage Session</h1>
 
-<div class="tools" *ngIf="session?.state?.tools">
-    <div class="tool" *ngFor="let tool of session.state.tools">
+@if (session?.state?.tools) {
+  <div class="tools">
+    @for (tool of session.state.tools; track tool) {
+      <div class="tool">
         {{getLabelForTool(tool)}}
-    </div>
-</div>
+      </div>
+    }
+  </div>
+}

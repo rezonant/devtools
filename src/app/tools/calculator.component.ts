@@ -22,26 +22,32 @@ export interface CalculatorState {
                 </button>
             </form>
         </header>
-
+        
         <div class="options">
             <mat-slide-toggle [(ngModel)]="autoEvaluate">Auto-Evaluate</mat-slide-toggle>
             <mat-slide-toggle [(ngModel)]="inspect">Inspect Result</mat-slide-toggle>
         </div>
-
-        <pre class="error-message" *ngIf="state?.errorMessage">{{state?.errorMessage}}</pre>
-        <ng-container *ngIf="!state?.errorMessage">
-            <pre *ngIf="inspect">{{state?.value | json}}</pre>
-            <pre *ngIf="!inspect">{{state?.value}}</pre>
-        </ng-container>
-
+        
+        @if (state?.errorMessage) {
+            <pre class="error-message">{{state?.errorMessage}}</pre>
+        }
+        @if (!state?.errorMessage) {
+            @if (inspect) {
+                <pre>{{state?.value | json}}</pre>
+            }
+            @if (!inspect) {
+                <pre>{{state?.value}}</pre>
+            }
+        }
+        
         <h1>Reference</h1>
         <p>All Javascript expressions are supported. There are also a number of convenience functions:</p>
         <ul>
-            <li>All <code>Math.*</code> members are made available at the top level. For instance, you can run 
+            <li>All <code>Math.*</code> members are made available at the top level. For instance, you can run
             <code>PI * 2</code> or <code>min(1,2,3)</code></li>
             <li><code>array(n)</code> creates an array of <code>n</code> elements filled with zero</li>
-            <li><code>range(first, last)</code> creates an array with the given start and end value and all values 
-                between. Also see <code>inclusiveRange()</code> and <code>exclusiveRange()</code></li>
+            <li><code>range(first, last)</code> creates an array with the given start and end value and all values
+            between. Also see <code>inclusiveRange()</code> and <code>exclusiveRange()</code></li>
             <li><code>keys(o)</code> is a shortcut for <code>Object.keys(o)</code></li>
             <li><code>values(o)</code> is a shortcut for <code>Object.values(o)</code></li>
         </ul>

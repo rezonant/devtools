@@ -40,17 +40,24 @@ export interface RegexState {
                     <span matPrefix>/</span>
                     <input type="text" matInput name="regex" [(ngModel)]="regex" />
                     <span matSuffix>
-                        /<ng-container 
-                            *ngIf="indices">d</ng-container><ng-container 
-                            *ngIf="global">g</ng-container><ng-container
-                            *ngIf="caseInsensitive">i</ng-container><ng-container 
-                            *ngIf="multiLine">m</ng-container><ng-container
-                            *ngIf="dotAll">s</ng-container><ng-container
-                            *ngIf="unicode">u</ng-container><ng-container
-                            *ngIf="sticky">y</ng-container>
+                        /@if (indices) {
+                        d
+                        }@if (global) {
+                        g
+                        }@if (caseInsensitive) {
+                        i
+                        }@if (multiLine) {
+                        m
+                        }@if (dotAll) {
+                        s
+                        }@if (unicode) {
+                        u
+                        }@if (sticky) {
+                        y
+                    }
                     </span>
                 </mat-form-field>
-
+                
                 <div class="options">
                     <div class="option-set first">
                         <mat-slide-toggle matTooltip="Indices: Generate indices for substring matches." [(ngModel)]="indices">/d</mat-slide-toggle>
@@ -70,29 +77,38 @@ export interface RegexState {
                 
                 <div class="splitter">
                     <div>
-                        <h1>Input</h1>
-                        <ngx-monaco-editor 
-                            #monaco
-                            [options]="monacoOptions" 
-                            [(ngModel)]="inputs"></ngx-monaco-editor>
+                    <h1>Input</h1>
+                    <ngx-monaco-editor
+                        #monaco
+                        [options]="monacoOptions"
+                        [(ngModel)]="inputs" 
+                        />
                     </div>
                     <div>
-                        <h1>Output</h1>
-                        <div *ngIf="state?.errorMessage">{{state.errorMessage}}</div>
-
-                        <ng-container *ngIf="state?.lineResults">
-                            <div class="line-results">
-                                <div class="line-result" [class.matches]="match.matches" *ngFor="let match of state.lineResults">
-                                    <mat-icon *ngIf="match.matches" [inline]="true">done</mat-icon>
-                                    <mat-icon *ngIf="!match.matches" [inline]="true">close</mat-icon>
-                                    <span>{{match.input}}</span>
-                                </div>
+                    <h1>Output</h1>
+                    @if (state?.errorMessage) {
+                        <div>{{state.errorMessage}}</div>
+                    }
+                
+                    @if (state?.lineResults) {
+                        <div class="line-results">
+                        @for (match of state.lineResults; track match) {
+                            <div class="line-result" [class.matches]="match.matches">
+                            @if (match.matches) {
+                                <mat-icon [inline]="true">done</mat-icon>
+                            }
+                            @if (!match.matches) {
+                                <mat-icon [inline]="true">close</mat-icon>
+                            }
+                            <span>{{match.input}}</span>
                             </div>
-                        </ng-container>
-
-                        <ng-container *ngIf="!state?.lineResults">
-                            <rdt-json-view [object]="state?.matches"></rdt-json-view>
-                        </ng-container>
+                        }
+                        </div>
+                    }
+                
+                    @if (!state?.lineResults) {
+                        <rdt-json-view [object]="state?.matches"></rdt-json-view>
+                    }
                     </div>
                 </div>
             </mat-tab>
@@ -103,8 +119,8 @@ export interface RegexState {
             <mat-tab label="POSIX">
             </mat-tab>
         </mat-tab-group>
-
-    `,
+        
+        `,
     styles: [`
         :host {
             display: flex;

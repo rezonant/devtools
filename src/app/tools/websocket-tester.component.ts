@@ -16,56 +16,66 @@ export interface WebSocketState {
 
 @Component({
     template: `
-        <ng-container *ngIf="state">
-            <header>
-                <form (submit)="connect()">
-                    <mat-form-field appearance="outline" floatLabel="always">
-                        <mat-label>URL</mat-label>
-                        <input type="text" matInput [(ngModel)]="state.url" (ngModelChange)="saveState()" name="url" placeholder="ws://..." />
-                        <span matSuffix>
-                            <span class="status">
-                                {{connectionStatus || 'Closed'}}
-                            </span>
-                        </span>
-                    </mat-form-field>
-                    <button mat-icon-button (click)="connect()" *ngIf="!isConnected" matTooltip="Connect to Server">
-                        <mat-icon>send</mat-icon>
-                    </button>
-                </form>
-                <button mat-button (click)="disconnect()" *ngIf="isConnected">
-                    <mat-icon>close</mat-icon>
-                    Disconnect
+        @if (state) {
+          <header>
+            <form (submit)="connect()">
+              <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>URL</mat-label>
+                <input type="text" matInput [(ngModel)]="state.url" (ngModelChange)="saveState()" name="url" placeholder="ws://..." />
+                <span matSuffix>
+                  <span class="status">
+                    {{connectionStatus || 'Closed'}}
+                  </span>
+                </span>
+              </mat-form-field>
+              @if (!isConnected) {
+                <button mat-icon-button (click)="connect()" matTooltip="Connect to Server">
+                  <mat-icon>send</mat-icon>
                 </button>
-                <button mat-button (click)="clear()" [disabled]="!state.history?.length">
-                    <mat-icon>clear_all</mat-icon>
-                    Clear
-                </button>
-            </header>
-            <ng-container *ngIf="state.history">
-                <div class="message" *ngFor="let message of state.history">
-                    <mat-icon *ngIf="message.dir === 'received'">arrow_downward</mat-icon>
-                    <mat-icon *ngIf="message.dir === 'sent'">arrow_upward</mat-icon>
-                    <pre>{{formatJson(message.message)}}</pre>
-                    <time>{{message.timestamp | date : 'short' }}</time>
-                </div>
-            </ng-container>
-            <footer>
-                <h2>Respond</h2>
-                <ngx-monaco-editor 
-                    #monaco
-                    [options]="monacoOptions" 
-                    [(ngModel)]="state.pendingMessage"
-                    (ngModelChange)="saveState()"
-                    ></ngx-monaco-editor>
-                <div style="text-align: right;">
-                    <button mat-raised-button color="primary" (click)="sendMessage()">
-                        <mat-icon>send</mat-icon>
-                        Send
-                    </button>
-                </div>
-            </footer>
-        </ng-container>
-    `,
+              }
+            </form>
+            @if (isConnected) {
+              <button mat-button (click)="disconnect()">
+                <mat-icon>close</mat-icon>
+                Disconnect
+              </button>
+            }
+            <button mat-button (click)="clear()" [disabled]="!state.history?.length">
+              <mat-icon>clear_all</mat-icon>
+              Clear
+            </button>
+          </header>
+          @if (state.history) {
+            @for (message of state.history; track message) {
+              <div class="message">
+                @if (message.dir === 'received') {
+                  <mat-icon>arrow_downward</mat-icon>
+                }
+                @if (message.dir === 'sent') {
+                  <mat-icon>arrow_upward</mat-icon>
+                }
+                <pre>{{formatJson(message.message)}}</pre>
+                <time>{{message.timestamp | date : 'short' }}</time>
+              </div>
+            }
+          }
+          <footer>
+            <h2>Respond</h2>
+            <ngx-monaco-editor
+              #monaco
+              [options]="monacoOptions"
+              [(ngModel)]="state.pendingMessage"
+              (ngModelChange)="saveState()"
+            ></ngx-monaco-editor>
+            <div style="text-align: right;">
+              <button mat-raised-button color="primary" (click)="sendMessage()">
+                <mat-icon>send</mat-icon>
+                Send
+              </button>
+            </div>
+          </footer>
+        }
+        `,
     styles: [`
         .connect-form {
             width: 100%;

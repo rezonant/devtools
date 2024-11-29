@@ -8,24 +8,26 @@ export interface Base64State {
 
 @Component({
     template: `
-        <div class="splitter" *ngIf="state">
+        @if (state) {
+          <div class="splitter">
             <div>
-                <mat-form-field class="vertically-sized" appearance="outline" floatLabel="always">
-                    <mat-label>Raw</mat-label>
-                    <textarea matInput [(ngModel)]="state.rawStr" 
-                        (change)="encode()" (keypress)="encode()"
-                        ></textarea>
-                </mat-form-field>
+              <mat-form-field class="vertically-sized" appearance="outline" floatLabel="always">
+                <mat-label>Raw</mat-label>
+                <textarea matInput [(ngModel)]="state.rawStr"
+                  (change)="encode()" (keypress)="encode()"
+                ></textarea>
+              </mat-form-field>
             </div>
             <div>
-                <mat-form-field class="vertically-sized" appearance="outline" floatLabel="always">
-                    <mat-label>Base64</mat-label>
-                    <textarea matInput [(ngModel)]="state.base64Str" 
-                        (change)="decode()" (keypress)="decode()"></textarea>
-                </mat-form-field>
+              <mat-form-field class="vertically-sized" appearance="outline" floatLabel="always">
+                <mat-label>Base64</mat-label>
+                <textarea matInput [(ngModel)]="state.base64Str"
+                (change)="decode()" (keypress)="decode()"></textarea>
+              </mat-form-field>
             </div>
-        </div>
-    `,
+          </div>
+        }
+        `,
     styles: [`
         :host {
             display: flex;

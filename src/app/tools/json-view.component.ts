@@ -3,12 +3,12 @@ import { Component, Input } from "@angular/core";
 @Component({
     selector: 'rdt-json-view',
     template: `
-        <ng-container *ngIf="type === 'object'">
-            <ng-container *ngFor="let key of keys">
+        @if (type === 'object') {
+            @for (key of keys; track key) {
                 <div class="property" (click)="collapsed = !collapsed">
                     <span class="key">
                         <mat-icon [inline]="true" [class.invisible]="typeOf(object[key]) !== 'object'">
-                            {{collapsed ? 'remove' : 'add' }}
+                        {{collapsed ? 'remove' : 'add' }}
                         </mat-icon>
                         {{key}}:
                     </span>
@@ -16,12 +16,14 @@ import { Component, Input } from "@angular/core";
                         {{getValueDisplay(object[key])}}
                     </span>
                 </div>
-                <div class="children" *ngIf="!collapsed && typeOf(object[key]) === 'object'">
-                    <rdt-json-view [object]="object[key]"></rdt-json-view>
-                </div>
-            </ng-container>
-        </ng-container>
-    `,
+                @if (!collapsed && typeOf(object[key]) === 'object') {
+                    <div class="children">
+                        <rdt-json-view [object]="object[key]"></rdt-json-view>
+                    </div>
+                }
+            }
+        }
+        `,
     styles: [`
         .property {
             .key {

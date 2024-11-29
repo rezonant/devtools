@@ -3,26 +3,29 @@ import { Component, Input } from "@angular/core";
 @Component({
     selector: 'rdt-html-view',
     template: `
-        <ng-container *ngIf="isElement(node)">
-            <div class="tag-start" (click)="collapsed = !collapsed">
-                &lt;{{asElement(node).localName}}<ng-container 
-                    *ngFor="let attr of getAttributes(asElement(node))"
-                    > {{attr.name}}="{{attr.value}}"</ng-container>&gt;
-            </div>
-            <div class="children" *ngIf="!collapsed">
-                <rdt-html-view 
-                    *ngFor="let child of getChildren(node)" 
+        @if (isElement(node)) {
+          <div class="tag-start" (click)="collapsed = !collapsed">
+            &lt;{{asElement(node).localName}}@for (attr of getAttributes(asElement(node)); track attr) {
+            {{attr.name}}="{{attr.value}}"
+            }&gt;
+          </div>
+          @if (!collapsed) {
+            <div class="children">
+              @for (child of getChildren(node); track child) {
+                <rdt-html-view
                     [node]="child"
-                    ></rdt-html-view>
+                    />
+              }
             </div>
-            <div class="tag-end" (click)="collapsed = !collapsed">
-                &lt;/{{asElement(node).localName}}&gt;
-            </div>
-        </ng-container>
-        <ng-container *ngIf="!isElement(node)">
-            "{{node.textContent}}"
-        </ng-container>
-    `,
+          }
+          <div class="tag-end" (click)="collapsed = !collapsed">
+            &lt;/{{asElement(node).localName}}&gt;
+          </div>
+        }
+        @if (!isElement(node)) {
+          "{{node.textContent}}"
+        }
+        `,
     styles: [`
         :host {
             font-family: monospace;

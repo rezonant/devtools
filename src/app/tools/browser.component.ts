@@ -9,16 +9,18 @@ export interface BrowserState {
 @Component({
     template: `
         <header>
-            <form (submit)="navigate()">
-                <mat-form-field appearance="outline" floatLabel="always">
-                    <mat-label>URL</mat-label>
-                    <input name="url" matInput type="text" [(ngModel)]="urlEntry" />
-                </mat-form-field>
-                <button mat-button>Go</button>
-            </form>
+          <form (submit)="navigate()">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>URL</mat-label>
+              <input name="url" matInput type="text" [(ngModel)]="urlEntry" />
+            </mat-form-field>
+            <button mat-button>Go</button>
+          </form>
         </header>
-        <iframe *ngIf="resourceUrl" [src]="resourceUrl"></iframe>
-    `,
+        @if (resourceUrl) {
+          <iframe [src]="resourceUrl"></iframe>
+        }
+        `,
     styles: [`
         :host {
             display: flex;

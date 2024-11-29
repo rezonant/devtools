@@ -16,50 +16,45 @@ export interface WikipediaState {
 
 @Component({
     template: `
-        <ng-container *ngIf="loading">
-            <mat-spinner></mat-spinner>
-        </ng-container>
-        <ng-container *ngIf="!loading && state">
-            <form (submit)="state.pageId = null; loadPage()">
-                <mat-form-field appearance="outline" class="search">
-                    <span matPrefix>
-                        <mat-icon>search</mat-icon>
-                    </span>
-                    <mat-label>
-                        <img class="logo" src="/assets/wikipedia-wordmark.svg" alt="Wikipedia" />
-                        <!-- <ng-container *ngIf="state.title">
-                            &raquo;
-                            {{state.title}}
-                        </ng-container> -->
-                    </mat-label>
-
-                    <input type="text" matInput name="search" [(ngModel)]="state.query" placeholder="Search for pages" />
-                </mat-form-field>
-            </form>
-
-            <ng-container *ngIf="state.pageId">
-                <header>
-                    <h1>{{state.title}}</h1>
-                </header>
-
-                <div class="wikihtml" [innerHTML]="state.html | trustedHtml"></div>
-            </ng-container>
-            <ng-container *ngIf="!state.pageId">
-                <!-- <pre>{{state.results | json}}</pre> -->
-
-                <ng-container *ngIf="!state.results">
-                    Search above for Wikipedia content.
-                </ng-container>
-                <ng-container *ngIf="state.results">
-                    <div class="search-result" *ngFor="let result of results">
-                        <a (click)="state.pageId = result.title; state.query = null; loadPage()" href="javascript:;">
-                            {{result.title}}
-                        </a>
-                    </div>
-                </ng-container>
-            </ng-container>
-        </ng-container>
-    `,
+        @if (loading || !state) {
+          <mat-spinner></mat-spinner>
+        } @else {
+          <form (submit)="state.pageId = null; loadPage()">
+            <mat-form-field appearance="outline" class="search">
+              <span matPrefix>
+                <mat-icon>search</mat-icon>
+              </span>
+              <mat-label>
+                <img class="logo" src="/assets/wikipedia-wordmark.svg" alt="Wikipedia" />
+                <!-- <ng-container *ngIf="state.title">
+                &raquo;
+                {{state.title}}
+                </ng-container> -->
+              </mat-label>
+            <input type="text" matInput name="search" [(ngModel)]="state.query" placeholder="Search for pages" />
+            </mat-form-field>
+          </form>
+          @if (state.pageId) {
+            <header>
+              <h1>{{state.title}}</h1>
+            </header>
+            <div class="wikihtml" [innerHTML]="state.html | trustedHtml"></div>
+          } @else {
+            <!-- <pre>{{state.results | json}}</pre> -->
+            @if (!state.results) {
+              Search above for Wikipedia content.
+            } @else {
+              @for (result of results; track result) {
+                <div class="search-result">
+                  <a (click)="state.pageId = result.title; state.query = null; loadPage()" href="javascript:;">
+                    {{result.title}}
+                  </a>
+                </div>
+              }
+            }
+          }
+        }
+        `,
     styles: [`
         :host {
             width: 1200px;

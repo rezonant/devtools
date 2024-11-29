@@ -20,11 +20,13 @@ export interface RandomState {
 @Component({
     template: `
         <mat-autocomplete #characterSetsAutocomplete="matAutocomplete">
-            <mat-option *ngFor="let characterSet of characterSets" [value]="characterSet.string">
-                {{characterSet.name}}
-            </mat-option>
+            @for (characterSet of characterSets; track characterSet) {
+                <mat-option [value]="characterSet.string">
+                    {{characterSet.name}}
+                </mat-option>
+            }
         </mat-autocomplete>
-
+        
         <header>
             <mat-form-field appearance="outline" floatLabel="always" class="type">
                 <mat-label>Type</mat-label>
@@ -39,9 +41,9 @@ export interface RandomState {
                 <mat-label>Count</mat-label>
                 <input matInput [(ngModel)]="count" type="number" min="1" />
             </mat-form-field>
-
-            <ng-container [ngSwitch]="state?.type">
-                <ng-container *ngSwitchCase="'string'">
+        
+            @switch (state?.type) {
+                @case ('string') {
                     <mat-form-field appearance="outline" floatLabel="always" class="type">
                         <mat-label>Min Length</mat-label>
                         <input matInput [(ngModel)]="minLength" type="number" min="1" />
@@ -54,9 +56,8 @@ export interface RandomState {
                         <mat-label>Character Set</mat-label>
                         <input matInput [(ngModel)]="characterSet" type="text" [matAutocomplete]="characterSetsAutocomplete" />
                     </mat-form-field>
-                    
-                </ng-container>
-                <ng-container *ngSwitchCase="'boolean'">
+                }
+                @case ('boolean') {
                     <mat-form-field appearance="outline" floatLabel="always" class="type">
                         <mat-label>Bias</mat-label>
                         <input matInput [(ngModel)]="bias" type="number" min="0" step="0.01" max="1" />
@@ -69,8 +70,8 @@ export interface RandomState {
                         <mat-label>False Value</mat-label>
                         <input matInput [(ngModel)]="falseString" type="string" />
                     </mat-form-field>
-                </ng-container>
-                <ng-container *ngSwitchCase="'number'">
+                }
+                @case ('number') {
                     <mat-form-field appearance="outline" floatLabel="always" class="type">
                         <mat-label>Min</mat-label>
                         <input matInput [(ngModel)]="min" type="number" min="1" />
@@ -83,22 +84,23 @@ export interface RandomState {
                         <mat-label>Bias</mat-label>
                         <input matInput [(ngModel)]="bias" type="number" min="0" step="0.01" max="1" />
                     </mat-form-field>
-
                     <mat-slide-toggle [(ngModel)]="round">Round</mat-slide-toggle>
-                </ng-container>
-            </ng-container>
-
+                }
+            }
+            
             <button mat-icon-button matTooltip="Generate new values" (click)="generate()">
                 <mat-icon>autorenew</mat-icon>
             </button>
         </header>
-
+        
         <div class="items">
-            <div class="item" *ngFor="let item of state?.items">
+            @for (item of state?.items; track item) {
+                <div class="item">
                 {{item}}
-            </div>
+                </div>
+            }
         </div>
-    `,
+        `,
     styles: [`
         header {
             display: flex;

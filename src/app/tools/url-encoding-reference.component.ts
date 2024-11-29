@@ -15,29 +15,30 @@ export interface EncodedCharacter {
 
 @Component({
     template: `
-        <ng-container *ngIf="state">
+        @if (state) {
             <mat-form-field appearance="outline">
                 <span matPrefix>
                     <mat-icon>search</mat-icon>
                 </span>
-                <input 
-                    type="text" 
-                    matInput 
+                <input
+                    type="text"
+                    matInput
                     [(ngModel)]="state.search"
                     (ngModelChange)="saveState()"
                     />
             </mat-form-field>
-
             <div class="entity-list">
-                <div class="entity" *ngFor="let entity of filteredEntities" [title]="entity.name || ''">
-                    <i>{{entity.character}}</i>
-                    <span>{{entity.entity || ' '}}</span>
-                    <span>hex {{entity.hex || ' '}}</span>
-                    <span>dec {{entity.dec || ' '}}</span>
+              @for (entity of filteredEntities; track entity) {
+                <div class="entity" [title]="entity.name || ''">
+                  <i>{{entity.character}}</i>
+                  <span>{{entity.entity || ' '}}</span>
+                  <span>hex {{entity.hex || ' '}}</span>
+                  <span>dec {{entity.dec || ' '}}</span>
                 </div>
+              }
             </div>
-        </ng-container>
-    `,
+        }
+        `,
     styles: [`
         :host {
             display: flex;

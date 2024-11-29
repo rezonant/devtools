@@ -7,21 +7,24 @@ export interface HtmlViewerState {
 
 @Component({
     template: `
-        <ngx-monaco-editor 
-            [options]="monacoOptions" 
-            [(ngModel)]="code"></ngx-monaco-editor>
+        <ngx-monaco-editor
+            [options]="monacoOptions"
+            [(ngModel)]="code" 
+            />
         
-        <ng-container *ngIf="errorMessage">
-            <div class="error">
-                {{errorMessage}}
-            </div>
-        </ng-container>
-        <ng-container *ngIf="!errorMessage">
-            <rdt-html-view 
-                *ngIf="doc?.firstChild" 
-                [node]="doc.firstChild"></rdt-html-view>
-        </ng-container>
-    `,
+        @if (errorMessage) {
+          <div class="error">
+            {{errorMessage}}
+          </div>
+        }
+        @if (!errorMessage) {
+          @if (doc?.firstChild) {
+            <rdt-html-view
+                [node]="doc.firstChild" 
+                />
+          }
+        }
+        `,
     styles: [`
         :host {
             display: flex;

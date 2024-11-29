@@ -10,19 +10,22 @@ export interface JsonViewerState {
 
 @Component({
     template: `
-        <ngx-monaco-editor 
+        <ngx-monaco-editor
             #monaco
-            [options]="monacoOptions" 
-            [(ngModel)]="code"></ngx-monaco-editor>
+            [options]="monacoOptions"
+            [(ngModel)]="code"
+            />
         
-        <ng-container *ngIf="state?.errorMessage">
+        @if (state?.errorMessage) {
             <div class="error">
                 {{state.errorMessage}}
             </div>
-        </ng-container>
-        <ng-container *ngIf="!state?.errorMessage">
-            <rdt-json-view [object]="state?.object"></rdt-json-view>
-        </ng-container>
+        }
+        @if (!state?.errorMessage) {
+            <rdt-json-view 
+                [object]="state?.object"
+                />
+        }
     `,
     styles: [`
         :host {

@@ -7,63 +7,67 @@ export interface WebcamTesterState {
 
 @Component({
     template: `
-        <ng-container *ngIf="missingPermission">
-            <h1>Need Permission</h1>
-            <p>This tool shows device information and a preview for your HTML5-compatible
-                webcams.</p>
-            <button mat-raised-button (click)="requestPermission()">Allow</button>
-        </ng-container>
-        <ng-container *ngIf="!missingPermission">
-            <header>
-                <mat-form-field appearance="outline" floatLabel="always">
-                    <mat-label>Device</mat-label>
-                    <mat-select name="deviceId" [(ngModel)]="deviceId">
-                        <mat-option [value]="device.deviceId" *ngFor="let device of devices">
-                            {{device.label}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </header>
-            <!-- <pre>{{devices | json}}</pre> -->
-            <ng-container *ngIf="device">
-                <h1>Device</h1>
-                <div>
-                    Device ID: <code>{{deviceId}}</code>
+        @if (missingPermission) {
+          <h1>Need Permission</h1>
+          <p>This tool shows device information and a preview for your HTML5-compatible
+          webcams.</p>
+          <button mat-raised-button (click)="requestPermission()">Allow</button>
+        } @else {
+          <header>
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>Device</mat-label>
+              <mat-select name="deviceId" [(ngModel)]="deviceId">
+                @for (device of devices; track device) {
+                  <mat-option [value]="device.deviceId">
+                    {{device.label}}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </header>
+          <!-- <pre>{{devices | json}}</pre> -->
+          @if (device) {
+            <h1>Device</h1>
+            <div>
+              Device ID: <code>{{deviceId}}</code>
+            </div>
+            <div>
+              Group ID: <code>{{device.groupId}}</code>
+            </div>
+            <pre>{{device | json}}</pre>
+            <div class="tracks">
+              @for (track of tracks; track track) {
+                <div class="track">
+                  <h2>Track</h2>
+                  <div>
+                    ID: <code>{{track.id}}</code>
+                  </div>
+                  <div>
+                    Kind: <code>{{track.kind}}</code>
+                  </div>
+                  <div>
+                    Label: <code>{{track.label}}</code>
+                  </div>
+                  <div>
+                    Muted: <code>{{track.muted}}</code>
+                  </div>
+                  <div>
+                    Content Hint: <code>{{track.contentHint}}</code>
+                  </div>
+                  <div>
+                    Enabled: <code>{{track.enabled}}</code>
+                  </div>
                 </div>
-                <div>
-                    Group ID: <code>{{device.groupId}}</code>
-                </div>
-                <pre>{{device | json}}</pre>
-
-                <div class="tracks">
-                    <div class="track" *ngFor="let track of tracks">
-                        <h2>Track</h2>
-                        <div>
-                            ID: <code>{{track.id}}</code>
-                        </div>
-                        <div>
-                            Kind: <code>{{track.kind}}</code>
-                        </div>
-                        <div>
-                            Label: <code>{{track.label}}</code>
-                        </div>
-                        <div>
-                            Muted: <code>{{track.muted}}</code>
-                        </div>
-                        <div>
-                            Content Hint: <code>{{track.contentHint}}</code>
-                        </div>
-                        <div>
-                            Enabled: <code>{{track.enabled}}</code>
-                        </div>
-                    </div>
-                </div>
-                <br/>
-                <h2>Preview</h2>
-                <video *ngIf="stream" [srcObject]="stream" autoplay></video>
-            </ng-container>
-        </ng-container>
-    `,
+              }
+            </div>
+            <br/>
+            <h2>Preview</h2>
+            @if (stream) {
+              <video [srcObject]="stream" autoplay></video>
+            }
+          }
+        }
+        `,
     styles: [`
         :host {
             display: flex;
